@@ -45,7 +45,22 @@ class AdminsController extends CommonController{
 
 	public function add(){
 		$post = $this->Post;
-		return $this->ajaxReturn( ajaxData( $post, 0 ) );
+		$m = D('Admins');
+		$res = $m->add($post);
+		if( $res ){
+			return $this->ajaxReturn( ajaxData( $post, 1 ) );
+		}
+		return $this->ajaxReturn( ajaxData( '添加失败！', 0 ) );
+	}
+
+	public function del(){
+		$get = $this->Get;
+		$m = D('Admins');
+		$res = $m->delete($get);
+		if( $res ){
+			return $this->ajaxReturn( ajaxData( '删除成功！', 1 ) );
+		}
+		return $this->ajaxReturn( ajaxData( '删除失败！', 0 ) );
 	}
 
 }

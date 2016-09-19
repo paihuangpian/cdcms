@@ -2,7 +2,7 @@ html,body{
 	height: 100%;
 }
 
-.nav{
+.navbar{
 	border: none;
 	border-radius: 0;
 	background: #0099cc;
@@ -15,17 +15,27 @@ html,body{
 	background: #0f7ea2;
 }
 
-.main {
+.body {
     height: calc(100% - 50px);
 }
 
-.main .right {
+.body .right {
     float: left;
     width: calc(100% - 150px);
     height: 100%;
+    background: #ebedef;
 }
 
-.main .left {
+.body .right .top {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccd2d4;
+    background: white;
+    color: #638998;
+    font-size: 15px;
+    font-family: '微软雅黑';
+}
+
+.body .left {
     width: 150px;
     height: 100%;
     float: left;

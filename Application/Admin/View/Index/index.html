@@ -5,38 +5,25 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>ydolm</title>
-	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/Font-Awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/style.css">
-	<script type="text/javascript" src="__PUBLIC__/admin/script/jquery-3.1.0.min.js"></script>
-	<script type="text/javascript" src="__PUBLIC__/admin/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/Bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/Font-Awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/Css/style.css">
+	<script type="text/javascript" src="__PUBLIC__/Admin/Script/jquery-3.1.0.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/Bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
-
-		function fnSub( url ){
-			var $column_select = $("select[name=column-select]");
-			var oData = {
-				'title'	: $('input[name=title]').val(),
-				'src'	: $('input[name=src]').val(),
-				'pid'	: $("select[name=column-select] option:selected").attr('id'),
-			};
-
-			$.post(url, oData, function(data){
-				if( data.state ){
-					//console.log($column_select,data.arr['id'],data.arr['title']);
-					$column_select.append('<option pid='+data.arr['id']+'>'+data.arr['title']+'</option>');
-				}
-			});
-			return false;
-		}
 		function fnPage(){
 			var page = $('.pagination div').children();
+			var modaly = $('.body .right .modaly');
+			modaly.fadeIn();
 			$('.pagination div').remove();
 			$('.pagination').html(page);
+			
 			$('.pagination a').click(function(){
 				$.get($(this).attr('href'), {index:'0'}, function(data){
 					if( data.status ){
-						$('.main .right').html(data.arr);
+						$('.body .right .content').html(data.arr);
 						fnPage();
+						modaly.fadeOut();
 					}
 				});
 				return false;
@@ -44,12 +31,18 @@
 			$(page).wrap('<li>');
 			$('.pagination .current').removeClass('current').parent().addClass('active');
 		}
+		
 		$(document).ready(function(){
-			$('.list-group a').click(function(){
-				$.get($(this).attr('href'), {index:'0'}, function(data){
+			var modaly = $('.body .right .modaly');
+			$('.mtr_nav li').click(function(){
+				$('.mtr_nav li').removeClass('action');
+				$(this).addClass('action');
+				modaly.fadeIn();
+				$.get($(this).attr('url'), {index:'0'}, function(data){
 					if( data.status ){
-						$('.main .right').html(data.arr);
+						$('.body .right .content').html(data.arr);
 						fnPage();
+						modaly.fadeOut();
 					}
 				});
 				return false;
@@ -103,6 +96,70 @@
 		td:hover{
 			color: #428bca;
 		}
+		li,ol,ul{
+			list-style: none;
+		}
+		.body .left .mtr_nav{
+			padding: 10px 0;
+			font-family: '微软雅黑';
+    		font-size: 15px;
+		}
+		.mtr_nav li{
+			padding: 10px 15px;
+			color: aliceblue;
+			cursor: pointer;
+			transition: background 0.3s;
+		}
+		.mtr_nav li i{
+			display: inline-block;
+			width: 25px;
+		}
+		.mtr_nav a:hover{
+			text-decoration: none;
+		}
+		.mtr_nav li:hover{
+			background: #181f27;
+		}
+		.action{
+			background: #181f27;
+		}
+		.body .right .top p{
+			margin-bottom: 0;
+			display: inline-block;
+		}
+		.body .right .top p i{
+			margin-right: 5px;
+		}
+		.body .right .top ul{
+			float: right;
+			font-size: 18px;
+		}
+		.body .right .top ul i{
+			margin-right: 10px;
+		}
+		.modaly {
+		    position: absolute;
+		    width: 88.9%;
+		    height: 85.7%;
+		    background: rgba(220, 223, 226, 0.8);
+		    top: 92px;
+		    display: none;
+		}
+		.modaly p{
+			width: 100px;
+		    height: 100px;
+		    text-align: center;
+		    line-height: 100px;
+		    font-size: 40px;
+		    position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    margin: -50px -50px;
+		}
+		.pagination{
+			float: right;
+			padding-right: 50px;
+		}
 	</style>
 </head>
 <body>
@@ -126,25 +183,23 @@
 		    </div> 
 	    </div> 
 	</nav>
-	<div class="main">
+	<div class="body">
 		<div class="left">
-			<div class="list-group">
-			  	<a class="list-group-item active">管理员中心</a>
-			  	<ul class="nav nav-pills nav-stacked" role="tablist">
-			  		<li><a href="<{:U('Admins/index')}>">管理员列表</a></li>
-			    	<li><a href="<{:U('Admins/add')}>">添加管理员</a></li>
-				</ul>
-			  	<a class="list-group-item">用户管理</a>
-			  	<ul class="nav nav-pills nav-stacked" role="tablist">
-			  		<li><a href="<{:U('Users/index')}>">用户列表</a></li>
-				</ul>
-			  	<a href="javascript::" class="list-group-item">产品管理</a>
-			  	<a href="javascript::" class="list-group-item">系统管理</a>
-			</div>
+			<ul class="mtr_nav">
+				<li url="<{:U('Index/index')}>"><i class="icon-home"></i>返回首页</li>
+				<li url="<{:U('Admins/index')}>"><i class="icon-cog"></i>管理中心</li>
+				<li url="<{:U('Users/index')}>"><i class="icon-user"></i>用户管理</li>
+				<li><i class="icon-sitemap"></i>商品管理</li>
+				<li><i class="icon-tags"></i>订单管理</li>
+			</ul>
 		</div>
 		<div class="right">
-			<div class="users"></div>
-			<div class="users"></div>
+			<div class="content">
+				
+			</div>
+			<div class="modaly">
+				<p><i class="icon-cog icon-spin"></i></p>
+			</div>
 		</div>
 	</div>
 
@@ -255,6 +310,45 @@
 	    	</form>
 	  	</div>
 	</div>
+	
+	<!-- 管理员添加 -->
+	<div class="modal fade" id="myAdmin-add" data-remote="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	  	<div class="modal-dialog">
+	  		<form class="form-horizontal" action="<{:U('Admins/add')}>" role="form" method="post" onsubmit="return fnSubmit( this.action, inputAdmin_add )">
+	    		<div class="modal-content">
+		      		<div class="modal-header">
+		        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        		<h4 class="modal-title" id="myModalLabel">添加管理员</h4>
+		        		<div class="alert alert-success alert-dismissible text-center" style="opacity: 0;transition: opacity 1s;margin:0;padding: 10px;" role="alert">role="alert"</div>
+		      		</div>
+	      			<div class="modal-body">
+			      		<div class="form-group">
+					    	<label for="inputName" class="col-sm-2 control-label">管理员名</label>
+					    	<div class="col-sm-10">
+					      		<input type="text" class="form-control" id="inputNamea" placeholder="UserName">
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="inputPassword" class="col-sm-2 control-label">密码</label>
+					    	<div class="col-sm-10">
+					      		<input type="password" class="form-control" id="inputPassworda" placeholder="密码">
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="inputPasswords" class="col-sm-2 control-label">确认密码</label>
+					    	<div class="col-sm-10">
+					      		<input type="password" class="form-control" id="inputPasswordsa" placeholder="确认密码">
+					    	</div>
+					  	</div>
+	      			</div>
+			      	<div class="modal-footer">
+			        	<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			        	<button type="submit" class="btn btn-primary">提交</button>
+			      	</div>
+	    		</div>
+	    	</form>
+	  	</div>
+	</div>
 	<script type="text/javascript">
 		var inputUser = {
 				'name':$('#inputName'),
@@ -272,6 +366,11 @@
 				'last':$('#inputLast'),
 				'ip':$('#inputIP'),
 			};
+		var inputAdmin_add = {
+			'name':$('#inputNamea'),
+			'password':$('#inputPassworda'),
+			'passwords':$('#inputPasswordsa'),
+		};
 	</script>
 </body>
 </html>
