@@ -1,0 +1,33 @@
+html,body{
+	height: 100%;
+}
+
+.nav{
+	border: none;
+	border-radius: 0;
+	background: #0099cc;
+	margin-bottom: 0;
+}
+.nav a.navbar-brand,.navbar-inverse .navbar-nav>li>a{
+	color: white;
+}
+.nav .navbar-brand{
+	background: #0f7ea2;
+}
+
+.main {
+    height: calc(100% - 50px);
+}
+
+.main .right {
+    float: left;
+    width: calc(100% - 150px);
+    height: 100%;
+}
+
+.main .left {
+    width: 150px;
+    height: 100%;
+    float: left;
+    background: #293038;
+}

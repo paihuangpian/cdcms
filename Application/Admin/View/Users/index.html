@@ -1,0 +1,29 @@
+<div class="admins">
+	<table class="table table-hover">
+		<tr>
+			<th>ID</th>
+			<th>用户名</th>
+			<th>用户等级</th>
+			<th>E-mail</th>
+			<th>注册时间</th>
+			<th>状态</th>
+			<th>操作</th>
+		</tr>
+		<foreach name="list" item="vo">
+			<tr>
+				<td><{$vo.id}></td>
+				<td><{$vo.name}></td>
+				<td><{$vo.level}></td>
+				<td><{$vo.email}></td>
+				<td><{$vo.create_at}></td>
+				<td><{$vo.status}></td>
+				<td><a onclick="return detail( this.href, inputUser )" href="<php>echo U('Admin/Users/detail/id/'.$vo['id']);</php>" data-toggle="modal" data-target="#myUser">查看</a></td>
+			</tr>
+		</foreach>
+	</table>
+	<nav class="page">
+		<ul class="pagination">
+			<{$show}>
+		</ul>
+	</nav>
+</div>

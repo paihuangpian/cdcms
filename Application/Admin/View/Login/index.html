@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>后台管理系统登陆界面</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/Font-Awesome/css/font-awesome.min.css">
+	<script type="text/javascript" src="__PUBLIC__/Admin/script/jquery-3.1.0.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/script/script.js"></script>
+	<style type="text/css">
+		.body {
+		    display: table;
+		    margin: 5% auto;
+		    padding: 50px 100px;
+		    border: 1px solid #d0d0d0;
+		    background: #323542;
+
+		}
+		.text-center{
+			color: white;
+		}
+		hr{
+			border-top: 1px solid #505259;
+    		width: 80px;
+    		margin-top: 0px;
+		}
+		button{
+			width: 100%;
+		}
+		abc{
+
+		}
+	</style>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			$('#verify').bind('click',function(){
+				$(this).attr('src',$(this).attr('src'));
+			});
+		});
+
+		function fnSub(url){
+			var $modal 	= $('.modal-content');
+			var oData 	= {
+				'name' 		: $('input[name=name]').val(),
+				'password' 	: $('input[name=password]').val(),
+				'verify'	: $('input[name=verify]').val(),
+				'token'		: $('input[name=token]').val(),
+			}
+
+			if( oData['name'] == ' ' || !oData['name'] ){
+				$modal.text('请输入登录名');
+				return false;
+			}
+
+			if( oData['password'] == ' ' || !oData['password'] ){
+				$modal.text('请输入登录密码');
+				return false;
+			}
+
+			if( oData['verify'] == ' ' || !oData['verify'] ){
+				$modal.text('请输入验证码');
+				return false;
+			}
+
+			$modal.text('...');
+			$.post(url, oData, function( data ){
+				if( data.status ){
+					$modal.removeClass('alert-danger').addClass('alert-success');
+					setTimeout(function(){
+						window.location.href = data.url;
+					},1000);
+				}
+				if( data.token ){
+					$modal.val(data.token);
+				}
+				$modal.text(data.arr);
+			});
+			return false;
+		}
+	</script>
+</head>
+<body>
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-sm">
+	    <div class="modal-content alert alert-danger">
+	      ...
+	    </div>
+	  </div>
+	</div>
+	<div class="body">
+		<div class="text-center">
+			<h3>云狄网络</h3>
+			<hr>
+			<p><img src="__PUBLIC__/Admin/images/logo.png"></p>
+		</div>
+		<form name="form1" action="<{:U('Login/index')}>" method="post" class="form" onsubmit="return fnSub(this.action);">
+		  	<div class="form-group">
+		    	<div class="input-group col-xs-12">
+		     		<div class="input-group-addon"><i class="icon-envelope"></i></div>
+		      		<input name="name" type="text" class="form-control" id="exampleInputAmount" placeholder="用户名">
+		    	</div>
+		  	</div>
+		  	<div class="form-group">
+				<div class="input-group col-xs-12">
+		     		<div class="input-group-addon"><i class="icon-key"></i></div>
+		      		<input name="password" type="password" class="form-control" id="exampleInputAmount" placeholder="密码">
+		    	</div>
+		  	</div>
+		  	<div class="form-group">
+				<div class="input-group col-xs-8">
+		     		<div class="input-group-addon"><i class="icon-exclamation-sign"></i></div>
+		      		<input name="verify" type="text" style="text-transform:uppercase;" class="form-control" id="exampleInputAmount" placeholder="验证码">
+		      		<div style="padding: 0;cursor: pointer;" class="input-group-addon"><img id="verify" height="30px" src="<{:U('Login/verify')}>"/></div>
+		    	</div>
+		  	</div>
+		  	<p><button type="submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">登陆</button></p>
+		  	<p class="text-center"><a href="">Copyright(C)2016</a></p>
+
+		</form>
+	</div>
+</body>
+</html>
