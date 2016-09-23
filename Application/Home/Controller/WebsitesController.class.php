@@ -33,7 +33,7 @@ class WebsitesController extends CommonController
     		 	}
     			$usernamne   = session('homeuser.name');//获取用户名 上传图片用到的路径
     			if(!file_exists('./Customer_Uploads/'.$usernamne)){
-    				mkdir($usernamne);
+    				mkdir('./Customer_Uploads/'.$usernamne);
     			}
     			//上传缩略图
     			$upload = new \Think\Upload();// 实例化上传类    
@@ -70,14 +70,9 @@ class WebsitesController extends CommonController
     			//删除图片
     			if($res){
     				if(S('config_logo_pic')){
-
-
     				if($_FILES['config_logo']['error'] != 4){@unlink('.'.S('config_logo_pic')['config_logo']);}
-
     				if($_FILES['config_pic']['error'] != 4){@unlink('.'.S('config_logo_pic')['config_pic']);}
-
     				if($_FILES['config_ico']['error'] != 4){@unlink('.'.S('config_logo_pic')['config_ico']);}
-    					
     				}
     			}
                 S('config_logo_pic',null);
@@ -363,7 +358,7 @@ class WebsitesController extends CommonController
                 //上传缩略图
                 $usernamne   = session('homeuser.name');//获取用户名 上传图片用到的路径
                 if(!file_exists('./Customer_Uploads/'.$usernamne)){
-                    mkdir($usernamne);
+                    mkdir('./Customer_Uploads/'.$usernamne);
                 }
                 //上传缩略图
                 $upload = new \Think\Upload();// 实例化上传类    
@@ -543,16 +538,12 @@ class WebsitesController extends CommonController
         $article_arrid = $_POST['arr'];//所有文章id
         $column_id     = $_POST['column_id'];//要移动到该栏目的id
         $article = M('Cms_article');
-
         foreach($article_arrid as $id){
-
             $res = $article->where("article_id = {$id}")->setField('article_column',"$column_id");
         }
         if($res){
-
             $this->ajaxReturn(1);
         }else{
-
             $this->ajaxReturn('移动失败！');
         }
 
@@ -653,7 +644,7 @@ class WebsitesController extends CommonController
             if($_FILES['carousel_pic']['error'] != 4){
                  $usernamne   = session('homeuser.name');//获取用户名 上传图片用到的路径
                 if(!file_exists('./Customer_Uploads/'.$usernamne)){
-                    mkdir($usernamne);
+                    mkdir('./Customer_Uploads/'.$usernamne);
                 }
                 //如果是修改 查询原有图片 缓存起来 添加成功后删除
                 if($_GET['id']){
