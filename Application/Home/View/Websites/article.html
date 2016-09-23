@@ -1,0 +1,259 @@
+<html>
+<head>
+<title>文档管理</title>
+<include file="Public/header" /><!-- b头部 -->
+<include file="Public/left" /><!-- 左边栏 -->
+<div class="container">
+<include file="nav" /><!-- 头部 -->
+<!--  快速转换位置按钮  -->
+<style>
+		table{ width: 100%; text-align: none; background-color: #C3C3C3; }
+     	table th, table td{ padding:0 0; text-indent: 0; }
+     	td{height:10px;}
+</style>
+
+<!--  内容列表   -->
+<form name="form2">
+<table width="98%" border="0" cellpadding="2" cellspacing="1" bgcolor="#D1DDAA" align="center" style="margin-top:8px">
+<tr bgcolor="#E7E7E7">
+	<td height="24" colspan="10" background="__PUBLIC__/Home/column/tbg.gif">&nbsp;文档列表&nbsp;
+	<a href="{{:U('Websites/article_add',array('cid'=>$cid))}}">添加文章</a>
+	</td>
+</tr>
+<tr align="center" bgcolor="#FAFAF1" height="22">
+	<td width="6%">ID</td>
+	<td width="4%">选择</td>
+	<td width="28%">文章标题</td>
+	<td width="10%">录入时间</td>
+	<td width="10%">类目</td>
+	<td width="8%">点击</td>
+	<td width="8%">权限</td>
+	<td width="8%">发布人</td>
+	<td width="15%">操作</td>
+</tr>
+<foreach name="articles" item="v">
+	<tr align='center' bgcolor="#FFFFFF" height="22" id="delete{{$v['article_id']}}" >
+		<td>{{$v['article_id']}}</td>
+		<td><input name="id" type="checkbox" id="id" value="{{$v['article_id']}}" class="np"></td>
+		<td align="left"><a href=''><u>{{$v['article_title']}}</u></a></td>
+		<td>{{$v['article_time']}}</td>
+		<td id="td{{$v['article_id']}}">{{$v['article_column']}}</td>
+		<td>{{$v['article_clicks']}}</td>
+		<td>{{$v['article_status']}}</td>
+		<td>{{$v['article_publisher']}}</td>
+		<td><a href="{{:U('Websites/article_add',array('id'=>$v['article_id']))}}">编辑</a> |
+		<a href="{{$domainurl}}/Indexs/product?aid={{$v['article_id']}}" target="_blank">预览</a> | 
+		<a href="javascript:;" onclick="deletes({{$v['article_id']}})">删除</a>
+		</td>
+	</tr>
+</foreach>
+
+<tr bgcolor="#FAFAF1">
+<td height="28" colspan="10">
+	&nbsp;
+	<a href="javascript:selAll()"  class="coolbg">全选</a>
+	 <a href="javascript:noSelAll()" class="coolbg">取消</a>
+	<a href="javascript:shows()" class="coolbg">&nbsp;移动&nbsp;</a>
+	<a href="javascript:delArc()" class="coolbg">&nbsp;删除&nbsp;</a>
+</td>
+</tr>
+<style type="text/css">
+
+	.tcdPageCode li{
+		display:inline;
+		width:35px;
+		height:25px;
+		font-size:20px;
+		margin-left: 10px;
+		/*background: #f00;*/
+	}
+	.current{
+
+		font-size:22px;
+		color:#f00;
+	}
+
+</style>
+<tr align="right" bgcolor="#EEF4EA">
+	<td height="36" colspan="10" align="center" >
+	<div class="tcdPageCode">
+			<ul>
+				{{$show}}
+				<li style="font-size:15px;width:120px;">共{{$number}}页 <font style="font-size:30px;">.</font>{{$count}}条结果</li>
+
+			</ul>
+	</div>
+	</td>
+</tr>
+</table>
+</form>
+<script type="text/javascript">
+	 $(function (){
+        $('.tcdPageCode ul div a').unwrap('div').wrapInner('<li></li>');
+        $('.tcdPageCode ul span').wrap('<li class="active"></li>');
+    })
+</script>
+<!--  搜索表单  -->
+<form name='form3' action="{{:U('Websites/article_search')}}" method='post'>
+<input type='hidden' name='dopost' value='' />
+<table width='98%'  border='0' cellpadding='1' cellspacing='1' bgcolor='#CBD8AC' align="center" style="margin-top:8px">
+  <tr bgcolor='#EEF4EA'>
+    <td background='__PUBLIC__/Home/column/tbg.gif' align='center'>
+      <table border='0' cellpadding='0' cellspacing='0'>
+        <tr>
+          <td width='90' align='center'>搜索条件：</td>
+          <td width='160'>
+          <select name='conditions' style='width:150px;'>
+          	<option value='1'>文章标题</option>
+          	<option value='2'>关键字</option>
+          	<option value='3'>文章内容</option>
+          </select>
+        </td>
+        <td width='70'>
+          关键字：
+        </td>
+        <td width='160'>
+          	<input type='text' name='keywords' value='' style='width:150px' />
+        </td>
+        <td width='110'>
+    		<select name='orderby' style='width:150px'>
+            <option value='id'>排序...</option>
+            <option value='pubdate'>发布时间</option>
+      	</select>
+        </td>
+        <td>
+          <input name="imageField" type="submit"  width="45" height="20" border="0" class="np" value="搜索" />
+        </td>
+       </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</form>
+
+<!-- 更改文章栏目模态框 -->
+<style type="text/css">
+  #div{
+        width:350px;
+        height:100px;
+        background: #036542;
+        position:fixed;
+        top:25%;
+        left:35%;
+        z-index:99;
+  }
+</style>
+<div id="div" style="display:none;">
+  <button style="float:right;margin-right:5px;margin-top:5px;" id="but">X</button>
+<br><br>
+      <div class="input"> <span style="margin-left:5px;">移动到：</span> 
+      	<select name="article_column" id="selects">
+	      	<foreach name="columns" item="v">
+	      		<option value="{{$v['column_id']}}">{{$v['column_name']}}</option>
+	      	</foreach>
+      	</select>
+      	<button type="button" onclick="moveArc()" >移动</button>
+      </div>
+</div>
+</div>
+<div style="width:100%;height:100%;position:absolute;left:0;top:0;z-index:9;display:none;background-color: hsla(100,20%,50%,0.5);" id="div2"></div>
+</body>
+<script type="text/javascript">
+//显示模态框  移动时
+function shows(){
+			if($("input:checked").length <= 0){
+				alert('你没有选择任何文章！');
+				return;
+			}
+	          $("#div2").css('display','');
+	          $("#div2").css('height',$('html').height());
+	          $('#div').show(300);
+} 
+ //隐藏模态框
+ $('#but').click(function(){
+  $("#div2").css('display','none');
+  $('#div').hide(300);
+ })
+
+
+//删除文章
+function deletes(id)
+{
+    if(confirm('你确认要删除吗！')){
+     $.post("{{:U('Websites/article_delete')}}",{'id':id},function(res){
+        if(res == 1){
+            $('#delete' + id).remove();
+            layer.msg('删除成功', {icon: 6});
+        }else{
+          layer.msg(res, {icon: 5});
+        }
+     })
+      
+    }
+}
+
+
+
+//全选
+function selAll(){
+
+	$(":checkbox").attr('checked',true);
+}
+
+//取消全选
+function noSelAll(){
+
+	$(":checkbox").attr('checked',false);
+
+}
+
+//批量删除
+function delArc(){
+			if($("input:checked").length <= 0){
+				alert('你没有选择任何文章！');
+				return;
+			}
+			if(confirm('批量操作，小心谨慎！你确定删除吗？')){
+
+					var check = $("input:checked");
+					var arr = {};
+					for(var i = 0;i < check.length;i++){
+						arr[i] = check.eq(i).val(); 
+					}
+					$.post("{{:U('Websites/article_delarc')}}",{'arr':arr},function(res){
+						if(res == 1){
+							for(var j = check.length;j >= 0;j--){
+				           		 $('#delete' + check.eq(j).val()).remove();
+							}
+				            layer.msg('批量删除成功', {icon: 6});
+				        }else{
+				            layer.msg(res, {icon: 5});
+				        }
+					})
+			}
+}
+
+//移动文章
+function moveArc(){
+					var column_id = $('#selects').val();
+					var check = $("input:checked");
+					var arr = {};
+					for(var i = 0;i < check.length;i++){
+						arr[i] = check.eq(i).val(); 
+					}
+					$.post("{{:U('Websites/article_moveArc')}}",{'arr':arr,'column_id':column_id},function(res){
+						if(res){
+							 $("#div2").css('display','none');
+  							 $('#div').hide(300);
+  							 for(var j = check.length;j >= 0;j--){
+				           		 $('#td' + check.eq(j).val()).html($("select option:selected").eq(2).html());
+							}
+							$(":checkbox").attr('checked',false);
+							layer.msg('移动栏目成功', {icon: 6});
+						}else{
+								layer.msg(res, {icon: 5});
+						}
+					})
+}
+</script>
+</html>

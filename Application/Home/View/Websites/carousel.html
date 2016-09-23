@@ -1,0 +1,139 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>轮播图列表</title>
+<include file="Public/header" /><!-- 头部 -->
+<include file="Public/left" /><!-- 左边栏 -->
+<div class="container">
+<include file="nav" /><!-- 头部 -->
+<style>
+		table{width: 100%;text-align: none;background-color: #C3C3C3; }
+      	table th, table td{ padding:0 0; text-indent: 0; }
+     	td{height:20px;}
+      	a{text-decoration:none;}
+</style>
+<!--  内容列表   -->
+<table width="98%" border="0" cellpadding="2" cellspacing="1" bgcolor="#D1DDAA" align="center" style="margin-top:8px">
+<tr bgcolor="#E7E7E7" >
+	<td colspan="10">&nbsp;轮播图列表&nbsp;
+	<a href="{{:U('Websites/carousel_add')}}">添加轮播图</a>
+	</td>
+</tr>
+<tr align="center" bgcolor="#FAFAF1" height="22">
+	<td width="6%">ID</td>
+	<td width="4%">选择</td>
+	<td width="28%">轮播图名称</td>
+	<td width="28%">图片</td>
+	<td width="10%">录入时间</td>
+	<td width="8%">权限</td>
+	<td width="10%">操作</td>
+</tr>
+<foreach name="carousels" item="v">
+	<tr align='center' bgcolor="#FFFFFF" height="22" id="delete{{$v['carousel_id']}}"  >
+		<td>{{$v['carousel_id']}}</td>
+		<td><input name="id" type="checkbox" id="id" value="{{$v['carousel_id']}}" class="np"></td>
+		<td align="left">{{$v['carousel_name']}}</td>
+		<td style="width:320px;height:90px;">
+		<a href=''>
+		<img src="{{$v['carousel_pic']}}"  style="max-height:90px;max-width:320px;"></a></td>
+		<td>{{$v['carousel_addtime']}}</td>
+		<td>{{$v['carousel_status']}}</td>
+		<td><a href="{{:U('Websites/carousel_add',array('id'=>$v['carousel_id']))}}">编辑</a> |
+		<a href="javascript:;" onclick="deletes({{$v['carousel_id']}})">删除</a>
+		</td>
+	</tr>
+</foreach>
+<tr bgcolor="#FAFAF1">
+<td height="28" colspan="10">
+	&nbsp;
+	<a href="javascript:selAll()"  class="coolbg">全选</a>
+	 <a href="javascript:noSelAll()" class="coolbg">取消</a>
+	<a href="javascript:delArc()" class="coolbg">&nbsp;删除&nbsp;</a>
+</td>
+</tr>
+<style type="text/css">
+	.tcdPageCode li{
+		display:inline;
+		width:30px;
+		height:25px;
+		font-size:20px;
+		margin-left: 10px;
+	}
+	.current{
+
+		font-size:22px;
+		color:#f00;
+	}
+</style>
+<tr align="right" bgcolor="#EEF4EA">
+	<td height="36" colspan="10" align="center" >
+	<div class="tcdPageCode">
+			<ul>
+				{{$show}}
+				<li style="font-size:15px;">共{{$number}}页 <font style="font-size:30px;">.</font>{{$count}}条结果</li>
+			</ul>
+	</div>
+	</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript">
+	 $(function (){
+        $('.tcdPageCode ul div a').unwrap('div').wrapInner('<li></li>');
+        $('.tcdPageCode ul span').wrap('<li class="active"></li>');
+    })
+</script>
+</body>
+<script type="text/javascript">
+//删除文章
+function deletes(id)
+{
+    if(confirm('你确认要删除吗！')){
+     $.post("{{:U('Websites/carousel_delete')}}",{'id':id},function(res){
+        if(res == 1){
+            $('#delete' + id).remove();
+            layer.msg('删除成功', {icon: 6});
+        }else{
+
+          layer.msg(res, {icon: 5});
+        }
+     })
+    }
+}
+//全选
+function selAll(){
+	$(":checkbox").attr('checked',true);
+}
+//取消全选
+function noSelAll(){
+	$(":checkbox").attr('checked',false);
+}
+
+//批量删除
+
+function delArc(){
+			if($("input:checked").length <= 0){
+				alert('你没有选择任何文章！');
+				return;
+			}
+			if(confirm('批量操作，小心谨慎！你确定删除吗？')){
+
+					var check = $("input:checked");
+					var arr = {};
+					for(var i = 0;i < check.length;i++){
+						arr[i] = check.eq(i).val(); 
+					}
+					$.post("{{:U('Websites/carousel_delarc')}}",{'arr':arr},function(res){
+						if(res == 1){
+							for(var j = check.length;j >= 0;j--){
+				           		 $('#delete' + check.eq(j).val()).remove();
+							}
+				            layer.msg('批量删除成功', {icon: 6});
+				        }else{
+				            layer.msg(res, {icon: 5});
+				        }
+					})
+			}
+}
+</script>
+</html>

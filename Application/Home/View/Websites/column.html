@@ -1,0 +1,135 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>栏目管理</title>
+  <include file="Public/header" /><!-- 左边栏 -->
+<script type="text/javascript" src="__PUBLIC__/Home/layer/layer.js"></script>
+  <style type="text/css">
+      table{
+        width: 100%;
+        text-align: none;
+        background-color: #C3C3C3;
+      }
+      table th, table td{
+        padding:0 0;
+        border: none;
+        text-indent: 0;
+      }
+      tr{
+        height:10px;
+      }
+      .zf_table{
+        background: #fff;
+      }
+      .container{
+        z-index: 0;
+      }
+
+  </style>
+  <include file="Public/left" /><!-- 左边栏 -->
+  <div class="container">
+  <include file="nav" /><!-- 头部 -->
+  
+<table align="center" bgcolor="#cfcfcf" border="0" cellpadding="3" cellspacing="1" width="98%">
+<tbody>
+<tr style="background:#fff;">
+   <td style="padding-left:10px;" height="28" >
+   <div style="float:left">
+    	<strong>网站栏目管理 </strong>
+   </div>
+   <div style="float:right;padding-right:6px;">
+   	<a href="{{:U('/Websites/column_add')}}" class="np coolbg" >增加顶级栏目</a>
+   </div></td>
+</tr>
+<form name="form1" method="post" action="catalog_do.php?dopost=upRankAll"></form>
+<tr>
+<td height="120" bgcolor="#FFFFFF" valign="top" >
+<foreach name="columns" item="vo" >   
+    <table border="0" cellpadding="2" cellspacing="0" class="zf_table" width="100%" id="table{{$vo['column_id']}}">
+      <tbody>
+      <tr>
+      <td style="background-color:#FBFCE2;" class="bline" width="2%">
+      <img style="cursor:pointer" id="img{{$vo['column_id']}}" onclick="LoadSunss({{$vo['column_id']}}); " src="__PUBLIC__/Home/column/dedeexplode.gif" height="11" width="11">
+      </td>
+      <td style="background-color:#FBFCE2;" class="bline">
+      <table border="0" cellpadding="0" cellspacing="0" width="98%"><tbody><tr><td width="50%">
+      <input class="np" name="tids[]" value="26" type="checkbox">
+      <a href="{{:U('/Websites/article',array('cid'=>$vo['column_id']))}}">
+      <font color="red"></font>{{$vo['column_name']}}[ID:{{$vo['column_id']}}]</a>(文档：{{$vo[ $vo['column_id'] ]}})  
+      </td>
+      <td align="right"><a href="{{:U('Home/Index/index')}}" target="_blank">预览</a>|
+      <a href="{{:U('/Websites/article',array('cid'=>$vo['column_id']))}}">内容</a>|
+      <a href="{{:U('/Websites/column_add',array('pid'=>$vo['column_id']))}}">增加子类</a>|
+      <a href="{{:U('/Websites/column_modify',array('id'=>$vo['column_id']))}}">更改</a>|
+      <a href="javascript:;" onclick="deletes({{$vo['column_id']}})" style="margin-right:50px;">删除</a>&nbsp;
+      <!--  <input name="sortrank26" value="50" style="width:25px;height:20px" type="text"> -->
+      <?php $status = array('正常','隐藏');?>
+      <button id="but{{$vo['column_id']}}" prompt="{{$vo['column_status']}}" onclick="status({{$vo['column_id']}});"><?php echo $status[ $vo['column_status']];?></button>
+
+      </td></tr></tbody></table></td></tr>
+      <tr><td colspan="2" id="suns26"></td></tr>
+    </tbody></table>
+<div style="margin-left:10px;display:none;" id="loads{{$vo['column_id']}}" judge='1'>
+
+</div>
+</foreach>
+<br>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="text/javascript">
+//异步加载栏目
+function LoadSunss(id)
+{
+    if($('#loads' + id).attr('judge') == 2){
+      $('#loads' + id).css('display','none');
+      $('#img' + id).attr('src',"__PUBLIC__/Home/column/dedeexplode.gif");
+       $('#loads' + id).attr('judge',1);
+      return;
+    }
+      $('#loads' + id).css('display','');
+      $('#img' + id).attr('src',"__PUBLIC__/Home/column/dedecontract.gif");
+
+      $('#loads' + id).load("{{:U('Websites/column2')}}",{pid: id},function(){
+
+        $('#loads' + id).attr('judge',2);
+      })
+}
+
+//删除栏目
+function deletes(ids)
+{
+    if(confirm('你确认要删除吗！')){
+     $.post("{{:U('Websites/column_delete')}}",{'id':ids},function(res){
+        if(res == 1){
+            $('#table' + ids).remove();
+            layer.msg('删除成功', {icon: 6});
+        }else{
+          layer.msg(res, {icon: 5});
+        }
+     })
+    }
+}
+
+function status(id){
+  var column_status = $('#but' + id).attr('prompt');
+  $.post("{{:U('Websites/column_status')}}",{'id':id,'status':column_status},function(res){
+      if(res == 1){
+         $('#but' + id).html('隐藏');
+         $('#but' + id).attr('prompt',res);
+         layer.msg('已隐藏', {icon: 6});
+      }else if(res == 0){
+
+         $('#but' + id).html('正常');
+         $('#but' + id).attr('prompt',res);
+         layer.msg('已恢复正常', {icon: 6});
+      }else{
+        layer.msg('失败了，稍后再试！', {icon: 5});
+      }
+  })
+}
+</script>
+</body>
+</html>

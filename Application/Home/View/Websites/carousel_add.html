@@ -1,0 +1,105 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>增加轮播图</title>
+<include file="Public/header" /><!-- b头部 -->
+<include file="Public/left" /><!-- 左边栏 -->
+<div class="container">
+<include file="nav" /><!-- 头部 -->
+<body onpageshow='event.persisted &amp;&amp; (function(){var allInstances = CKEDITOR.instances, editor, doc;for ( var i in allInstances ){	editor = allInstances[ i ];	doc = editor.document;	if ( doc )	{		doc.$.designMode = "off";		doc.$.designMode = "on";	}}})();' topmargin="8">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+    <tbody><tr>
+      <td height="30" width="60%" style="text-align:left;">
+      <a href="{{:U('Websites/carousel')}}"><u>轮播图列表</u></a> &gt;&gt; 添加轮播图</td>
+    </tr>
+  </tbody>
+  </table>
+  <style>
+       table{ width: 100%; text-align: none; }
+       table th, table td{padding:0 0; text-indent: 0;}
+       tr{height:40px;}
+       td{height:30px;}
+       tr:first-child td:first-child{ text-align:right;}
+      
+</style>
+<form name="form1" action="{{:U('Websites/carousel_add')}}?id={{$carousel['carousel_id']}}" enctype="multipart/form-data" method="post" onsubmit="return checkSubmit()">
+  <table id="needset" style="border:1px solid #cfcfcf;background:#ffffff;" align="center" border="0" cellpadding="2" cellspacing="2" width="98%">
+    <tbody>
+    <tr>
+      <td colspan="5" class="bline" height="24">
+      	<table border="0" cellpadding="0" cellspacing="0" width="800">
+          <tbody><tr>
+            <td width="63">&nbsp;轮播图名称：</td>
+            <td width="408"><input name="carousel_name" id="title" style="width:588px" value="{{$carousel['carousel_name']}}" type="text" /></td>
+          </tr>
+        </tbody></table></td>
+    </tr>
+     <tr>
+      <td colspan="5" class="bline" height="24">
+        <table border="0" cellpadding="0" cellspacing="0" width="800">
+          <tbody><tr>
+            <td width="63">&nbsp;连接地址：</td>
+            <td width="408"><input name="carousel_url" style="width:588px" value="{{$carousel['carousel_url']}}" type="text" /></td>
+          </tr>
+        </tbody></table></td>
+    </tr>
+     <tr>
+      <td colspan="5" class="bline" height="24">
+        <table border="0" cellpadding="0" cellspacing="0" width="800">
+          <tbody><tr>
+            <td width="63">&nbsp;备注：</td>
+            <td width="408"><input name="carousel_remarks" style="width:588px" value="{{$carousel['carousel_remarks']}}" type="text" /></td>
+          </tr>
+        </tbody></table></td>
+    </tr>
+     <tr>
+      <td colspan="5" class="bline" height="24">
+        <table border="0" cellpadding="0" cellspacing="0" width="800">
+        <tbody>
+        <tr>
+          <td width="110">&nbsp;状态：</td>
+          <td>
+       <span id="typeidct">
+       <input name="carousel_status" type="radio" value="0" checked />显示
+       <input name="carousel_status" type="radio" value="1" {{$carousel['carousel_status']?'checked':''}} />隐藏
+      </span>
+       </td>
+        </tr>
+      </tbody></table></td>
+    </tr>
+  <tr>
+     <td colspan="2"><table style="margin-bottom:3px;" border="0" cellpadding="0" cellspacing="0" width="100%">
+       <tbody><tr> 
+        <td class="bline" height="24" width="110">&nbsp;图片：</td>
+        <td class="bline">
+        <input name="carousel_pic" id="suoluetu1" style="width:300px" class="text" type="file"  onchange="check(this)"> 
+    </td>
+       </tr>
+    </tbody></table>
+</td>
+   </tr>
+    <tr>
+    <td>
+    <span style="margin-left:110px;color:#f00;">{{$Think.get.error|default=''}}</span>
+      <input type="submit" value="提交">
+    </td>
+    </tr>
+  </tbody>
+  </table>
+</form>
+<div style="width:98%;text-align:center;" id="div_pic">
+     <img src="{{$carousel['carousel_pic']}}" style="max-width:98%" id="imgs">
+</div>
+</div>
+</body>
+<script type="text/javascript">
+    //获取临时图片
+    var img = document.getElementById('imgs');
+    function check(obj){
+        $('#div_pic').css('display','');
+        console.dir(obj.files);
+        img.src = window.URL.createObjectURL(obj.files[0]);
+    }
+</script>
+</html>

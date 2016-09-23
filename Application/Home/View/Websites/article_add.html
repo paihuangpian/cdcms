@@ -1,0 +1,208 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>增加文章</title>
+<include file="Public/header" /><!-- b头部 -->
+ <include file="Public/left" /><!-- 左边栏 -->
+  <div class="container">
+  <include file="nav" /><!-- 头部 -->
+<!-- 百度编辑器 -->
+ <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/lang/zh-cn/zh-cn.js"></script>
+<!-- 百度编辑器 -->
+
+<body topmargin="8">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+    <tbody><tr>
+      <td height="30" width="60%" style="text-align:left;">
+      <a href="{{:U('Admin/Article/index',array('cid'=>$cid))}}"><u>文章列表</u></a> &gt;&gt; 发布文章</td>
+    </tr>
+  </tbody>
+  </table>
+  <style>
+  table{
+        width: 100%;
+        text-align: none;
+      }
+      table th, table td{
+        padding:0 0;
+        text-indent: 0;
+      }
+      tr{height:40px;}
+     td{height:30px;}
+     tr:first-child td:first-child{
+            text-align:right;
+          }
+</style>
+<form name="form1" action="{{:U('Websites/article_add')}}" enctype="multipart/form-data" method="post" onsubmit="return checkSubmit()">
+<input type="hidden" name="id" value="{{$article['article_id']}}" id="hidden_id" />
+  <table id="needset"  align="center" border="0" cellpadding="2" cellspacing="2" width="98%">
+    <tbody>
+    <tr style="height:40px;">
+      <td colspan="5" class="bline" height="24">
+      	<table border="0" cellpadding="0" cellspacing="0" width="800">
+          <tbody>
+          <tr>
+            <td width="35">&nbsp;文章标题：</td>
+            <td width="408">
+            <input name="article_title" id="title" style="width:70%" type="text" value="{{$article['article_title']}}"/><span style="color:#f00;" id="title_prompt"></span>
+            </td>
+          </tr>
+        </tbody>
+        </table>
+        </td>
+    </tr>
+     <tr>
+      <td colspan="5" class="bline" height="24">
+        <table border="0" cellpadding="0" cellspacing="0" width="800">
+        <tbody>
+        <tr>
+          <td width="38">&nbsp;关键字：</td>
+          <td width="448">
+          <input name="article_keywords" id="keywords" style="width:70%" type="text" value="{{$article['article_keywords']}}" />
+         </td>
+        </tr>
+      </tbody></table></td>
+    </tr>
+     <tr>
+      <td colspan="5" class="bline" height="24">
+      <table border="0" cellpadding="0" cellspacing="0" width="800">
+        <tbody>
+        <tr>
+          <td width="38">&nbsp;文章描述：</td>
+          <td width="449"><textarea name="article_description" rows="5" id="description" style="width:70%;height:50px">{{$article['article_description']}}</textarea></td>
+        </tr>
+      </tbody></table>
+      </td>
+  </tr>
+    <tr>
+      <td colspan="5" class="bline" height="24">
+      	<table border="0" cellpadding="0" cellspacing="0" width="800">
+          <tbody>
+          <tr>
+            
+            <td width="90">作　者：</td>
+            <td>
+            	<input name="article_publisher" id="writer" style="width:70%" type="text" value="{{$article['article_publisher']}}" />
+            </td>
+              </td>
+          </tr>
+        </tbody></table>
+        </td>
+    </tr>
+    <tr>
+      <td colspan="5" class="bline" height="24">
+      	<table border="0" cellpadding="0" cellspacing="0" width="800">
+        <tbody><tr>
+          <td width="90">&nbsp;所属栏目：</td>
+          <td>
+       <span id="typeidct">
+       <select name="article_column" id="typeid" style="width:240px">
+            <option value="0">请选择栏目...</option>
+            <foreach name="columns" item="v">
+              <option value="{{$v['column_id']}}" 
+                  <if condition="($v['column_id'] eq $article['article_column']) OR ($v['column_id'] eq $cid)">
+                    selected
+                  </if>
+
+              >{{$v['column_name']}}</option>
+            </foreach>
+      </select>
+      </span>
+			 </td>
+        </tr>
+      </tbody></table></td>
+    </tr>
+     <tr>
+      <td colspan="5" class="bline" height="24">
+        <table border="0" cellpadding="0" cellspacing="0" width="800">
+        <tbody><tr>
+          <td width="90">&nbsp;文章状态：</td>
+          <td>
+       <span id="typeidct">
+       <input name="article_status" type="radio" value="0"
+            <if condition="($article['article_status'] eq 0)">
+                    checked
+            </if>
+
+       />显示
+       <input name="article_status" type="radio" value="1" 
+        <if condition="($article['article_status'] eq 1)">
+                    checked
+        </if>
+       />隐藏
+      </span>
+       </td>
+        </tr>
+      </tbody></table></td>
+    </tr>
+  <tr>
+     <td colspan="2"><table style="margin-bottom:3px;" border="0" cellpadding="0" cellspacing="0" width="100%">
+       <tbody><tr> 
+        <td class="bline" height="24" width="90">&nbsp;缩略图：</td>
+        <td class="bline">
+        <input name="article_pic" id="suoluetu1" style="width:300px" class="text" type="file"  onchange="check(this)"> 
+    </td>
+       </tr>
+    </tbody></table>
+
+<div style="width:280px;height:280px;position:absolute;top:50px;right:20px;{{$article['article_pic']?'':'display:none;'}}" id="div_pic">
+     <img src="{{$article['article_pic']}}" width="280" id="imgs">
+</div>
+</td>
+   </tr>
+    <tr>
+      <td colspan="2" class="bline2" height="28" bgcolor="#F9FCEF">
+      	<div style="float:left;line-height:28px;">&nbsp;<strong>文章内容：</strong></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <script id="editor" type="text/plain" style="width:100%;height:500px;" name="article_text">{{$article['article_text']}}</script>
+      </td>
+    </tr>
+    <tr><td><input type="submit" value="提交"></td></tr>
+  </tbody>
+  </table>
+</form>
+</div>
+</body>
+<script type="text/javascript">
+var ue = UE.getEditor('editor');//创建百度编辑器
+    //获取临时图片
+    var img = document.getElementById('imgs');
+    function check(obj){
+        $('#div_pic').css('display','');
+        console.dir(obj.files);
+        img.src = window.URL.createObjectURL(obj.files[0]);
+    }
+    //查询标题是否也存在
+    var title_ = false;
+  $('#title').change(function(){
+    var title = $('#title').val();
+    $.post("{{:U('Websites/article_title')}}",{'title':title},function(res){
+      if(res){
+        title_ = false;
+        $('#title_prompt').html(res);
+      }else{
+        title_ = true;
+      }
+    })
+  })
+
+  function checkSubmit(){
+    if(!$('#title').val()){
+      alert('标题不能为空！');
+     return false;
+    }else if(!title_ && !$('#hidden_id').val()){
+       alert('已有同名文章，请重新填写！');
+       return false;
+    }else if($('#typeid').val()  == 0){
+      alert('你必须选择一个栏目');
+      return false;
+    }
+  }
+
+</script>
+</html>

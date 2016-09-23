@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>用户首页</title>
+  <include file="Public/header" /><!-- 头部 -->
+  <include file="Public/left" /><!-- 左边栏 -->
+  <div class="container">
+  <include file="nav" /><!-- 头部 -->
+ <table style="margin-top:10px" align="center" bgcolor="#D6D6D6" border="0" cellpadding="0" cellspacing="0" width="98%">
+  <tbody>
+  <tr>
+   <td bgcolor="#FFFFFF" width="100%">
+   <form action="{{:U('/Websites/config')}}" method="post" enctype="multipart/form-data" >
+      <div id="">
+      <table style=""  bgcolor="#cfcfcf" border="0" cellpadding="1" cellspacing="1" width="100%" >
+      <tbody>
+      <tr height="25" align="center" bgcolor="#FBFCE2">
+       <td width="300" style="text-align:center;">参数说明</td>
+       <td>参数值</td>
+      </tr>
+     
+      <style type="text/css">
+         tr:first-child td:first-child{
+            text-align:right;
+            width:150px;
+          }
+      </style>
+      <tr height="25" align="center" bgcolor="#F9FCEF">
+       <td width="300" >公司名称： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_name"  value="{{$configs['config_name']}}" style="width:80%" type="text"></td>
+      </tr>   
+       <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300">主页链接名： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_home"  value="{{$configs['config_home']}}" style="width:80%" type="text"></td>
+      </tr>
+        <tr height="25" align="center" bgcolor="#F9FCEF">
+       <td width="300">网站主标题： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_title"  value="{{$configs['config_title']}}" style="width:80%" type="text"></td>
+      </tr>
+      <tr height="25" align="center" bgcolor="#F9FCEF">
+       <td width="300">站点默认关键字： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_keywords"  value="{{$configs['config_keywords']}}" style="width:80%" type="text"></td>
+      </tr> 
+
+      <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300">站点描述： </td>
+       <td style="padding:3px;" align="left">
+       <textarea name="config_description" row="4" class="textarea_info" style="width:98%;height:50px">{{$configs['config_description']}}</textarea></td>
+      </tr>
+      <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300">手机： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_phone" value="{{$configs['config_phone']}}" style="width:80%" type="text"></td>
+      </tr>
+      <tr height="25" align="center" bgcolor="#F9FCEF">
+       <td width="300">电话： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_tel"  value="{{$configs['config_tel']}}" style="width:80%" type="text"></td>
+      </tr>
+      <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300">E-mail： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_email"  value="{{$configs['config_email']}}" style="width:80%" type="text"></td>
+      </tr>
+      <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300">在线客服： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_customer"  value="{{$configs['config_customer']}}" style="width:80%" type="text"></td>
+      </tr>
+      
+      <tr height="25" align="center" bgcolor="#F9FCEF">
+       <td width="300">地址： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_address"  value="{{$configs['config_address']}}" style="width:80%" type="text"></td>
+      </tr>
+
+      <tr height="25" align="center" bgcolor="#F9FCEF">
+       <td width="300">网站版权信息： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_copyright"  value="{{$configs['config_copyright']}}" style="width:80%" type="text"></td>
+      </tr>
+      <tr height="25" align="center" bgcolor="#F9FCEF">
+       <td width="300">备案信息： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_record" value="{{$configs['config_record']}}" style="width:80%" type="text"></td>
+      </tr>
+     
+
+
+      <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300">统计代码： </td>
+       <td style="padding:3px;" align="left">
+       <textarea name="config_statistics" row="4" id="config_statistics" class="textarea_info" style="width:98%;height:50px">{{$configs['config_statistics']}}</textarea></td>
+      </tr>
+
+
+       <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300">LOGO：</td>
+       <td  align="left">
+       <input type="file" name="config_logo" onchange="check(this)" />
+       </td>
+      </tr>
+      <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300">二维码：</td>
+       <td  align="left">
+       <input type="file" name="config_pic"  onchange="checks(this)" />
+       </td>
+      </tr>
+      <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300">网站ico图片：</td>
+       <td  align="left">
+      
+       <input type="file" name="config_ico"  onchange="checkss(this)" />
+
+       </td>
+      </tr>
+
+       <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300"> </td>
+       <td style="padding:3px;" align="cneter">
+       <div style="width:30%;height:130px;float:left;">
+          <img src="{{$configs['config_logo']}}" style="max-width:205px;max-height:130px;" id="logo_img" />
+       </div>
+       <div style="width:30%;height:130px;float:left;">
+          <img src="{{$configs['config_pic']}}" style="max-width:205px;max-height:130px;" id="pic_img" />
+       </div>
+       <div style="width:30%;height:130px;float:left;">
+          <img src="{{$configs['config_ico']}}" style="max-width:205px;max-height:130px;" id="ico_img" />
+       </div>
+       </td>
+      </tr>
+      </tbody>
+      </table>
+     </div>
+     <table style="border:1px solid #cfcfcf;border-top:none;" border="0" cellpadding="1" cellspacing="1" width="100%">
+      <tbody><tr bgcolor="#F9FCEF">
+       <td colspan="3" height="50">
+       <table border="0" cellpadding="1" cellspacing="1" width="98%">
+         <tbody><tr>
+          <td width="11%">&nbsp;</td>
+          <td width="11%">
+          <input  type="submit" width="60" value="提交配置"></td>
+          <td width="78%">
+          </td>
+         </tr>
+        </tbody>
+        </table>
+        </td>
+      </tr>
+     </tbody>
+     </table>
+    </form>
+    </td>
+  </tr>
+ </tbody>
+ </table>
+</div>
+</div>
+</body>
+
+<script type="text/javascript">
+
+  //获取临时图片
+    var logo_img = document.getElementById('logo_img');
+    function check(obj){
+        $('#div_pic').css('display','');
+        console.dir(obj.files);
+
+        logo_img.src = window.URL.createObjectURL(obj.files[0]);
+
+
+    }
+
+    var pic_img = document.getElementById('pic_img');
+    function checks(obj){
+        // $('#div_pic').css('display','');
+        console.dir(obj.files);
+
+        pic_img.src = window.URL.createObjectURL(obj.files[0]);
+
+
+    }
+
+
+    var ico_img = document.getElementById('ico_img');
+    function checkss(obj){
+        // $('#div_pic').css('display','');
+        console.dir(obj.files);
+
+        ico_img.src = window.URL.createObjectURL(obj.files[0]);
+
+
+    }
+
+</script>
+</html>

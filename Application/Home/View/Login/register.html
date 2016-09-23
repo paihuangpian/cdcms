@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册 - 云狄智能建站</title>
+   <include file="header" />
+</head>
+<body>
+    <!-- header -->
+    <div class="header">
+        <div class="container">
+            <a href="javascript:;" class="brand">云狄智能建站</a><span>&nbsp;重新定义自己的网站</span>
+            <span class="fr">已有账号? <a href="{{:U('/Login/login')}}">立即登录</a></span>
+        </div>
+    </div>
+    
+    <!-- form -->
+    <div class="container"> 
+        <div class="title">
+            <ul>
+                <li><i class="fa fa-arrow-circle-right fa-fw"></i> 注册</li>
+                <img src="__PUBLIC__/Home/login_register/images/arrow.jpg" style="position:absolute" alt="">
+                <li><i class="fa fa-check-circle fa-fw"></i> 自助建站</li>
+            </ul>
+        </div>
+        <div class="form">
+            <form class="form-horizontal" role="form" method="POST" action="{{:U('/Login/registered')}}" onsubmit="return onsub();">
+                <div>
+                    <p class="item-p">用户名 <small>6-20位的字母和数字的组合，并以字母开头</small></p>
+                    <input type="text" class="form-control" name="name" value="" placeholder="用户名作为唯一标识" id="name" judge='1' />
+                    <span id="span_name"></span>
+                </div>
+                <div class="item">
+                    <p class="item-p">邮箱</p>
+                    <input type="email" class="form-control" name="email" value="" placeholder="邮箱作为登录凭证" id="email" judge='1' />
+                    <span id="span_email"></span>
+                </div>
+                <div class="item">
+                    <p class="item-p">密码</p>
+                    <input type="password" class="form-control" name="password" placeholder="密码长度不得低于6位" id="password" />
+                    <span id="span_password"></span>
+                </div>
+                <div class="item">
+                    <p class="item-p">确认密码</p>
+                    <input type="password" class="form-control" name="password_confirmation" placeholder="" id="password_confirmation" />
+                    <span id="span_password_confirmation"></span>
+                </div>
+                <div class="item">
+                    <p class="item-p">验证码</p>
+                    <input type="text" class="form-control" name="code" placeholder="验证码" autocomplete="off" style="width:180px;float:left;">
+                    <img src="{{:U('/Login/code')}}" style="float:left;width:170px;height:45px;margin-left:10px;" onclick="this.src='/Login/code?'+Math.random()" />
+                     <span id="span_captcha" style="line-height:45px;">:{{$Think.get.error|default=''}}</span>
+                </div> 
+                <div style="width:100%;height:30px;float:none;"></div>
+                <div class="item" style="width:360px;">
+                    <button type="submit" >注册</button> 
+                </div>
+            </form>
+        </div>
+        <include file="footer" />
+    </div>
+</body>
+<script type="text/javascript">
+
+function onsub(){
+    var rep_name = /^[a-zA-Z][a-zA-Z0-9_]{6,20}$/;
+    var rep_email = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+
+    if(!rep_name.test($('#name').val())){
+
+        $('#span_name').html('用户名不合法！');
+        return false;
+
+    }else if(!rep_email.test($('#email').val())){
+
+           
+         $('#span_email').html('邮箱不合法！');
+         return false;
+
+    }else if($('#password').val().length < 6){
+
+          $('#span_password').html('密码长度不得低于6位！');
+          return false;
+
+    }else if($('#password').val() != $('#password_confirmation').val()){
+
+          $('#span_password_confirmation').html('确认密码错误！');
+          return false;
+    }else if($('#name').attr('judge') == '1'){
+
+               $("#span_name").html('该用户名已经被注册！');
+               return false;
+    }else if($('#email').attr('judge') == '1'){
+
+        $("#span_email").html('该邮箱已经被注册！');
+        return false;
+    }
+}
+//用户名唯一验证
+$('#name').change(function(){
+ var rep_name = /^[a-zA-Z][a-zA-Z0-9_]{5,20}$/;
+ if(!rep_name.test($('#name').val())){
+
+    $("#span_name").html('用户名不合法！').css('color','#f00');
+    return false;
+ }
+    if($('#name').val()){
+        $.post("{{:U('/Login/judge_name')}}",{'name':$('#name').val()},function(res){
+            if(res == 1){
+                $('#name').attr('judge','2');
+                $("#span_name").html('可以注册').css('color','#3FB618');
+            }else{
+
+                $("#span_name").html(res).css('color','#f00');
+            }
+        })
+    }
+})
+
+    
+//验证邮箱唯一
+$('#email').change(function(){
+    var rep_email = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+    if(!rep_email.test($('#email').val())){
+
+        $('#span_email').html('邮箱不合法！');
+         return false;
+    }
+    if($('#email').val()){
+
+        $.post("{{:U('/Login/judge_email')}}",{'email':$('#email').val()},function(res){
+            if(res == 1){
+                 $('#email').attr('judge','2');
+                $("#span_email").html('可以使用').css('color','#3FB618');
+
+            }else{
+
+                $("#span_email").html(res).css('color','#f00');
+            }
+        })
+    }
+})
+
+
+//密码
+$('#password').change(function(){
+    if($('#password').val().length < 6){
+
+          $('#span_password').html('密码长度不得低于6位！').css('color','#f00');
+    }else{
+
+        $('#span_password').html('OK').css('color','#3FB618');
+    }
+})
+
+
+//确认密码
+$('#password_confirmation').change(function(){
+
+    if($('#password').val() != $('#password_confirmation').val()){
+
+          $('#span_password_confirmation').html('确认密码错误！');
+
+    }else{
+
+        $('#span_password_confirmation').html('OK').css('color','#3FB618');
+    }
+
+})
+
+
+
+
+</script>
+</html>
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>登录 - 云狄智能建站</title>
+	<include file="header" /> 
+</head>
+<body>
+	<!-- header -->
+	<div class="header">
+		<div class="container">
+			<a href="javascript:;" class="brand">云狄智能建站</a><span>&nbsp;重新定义自己的网站</span>
+			<span class="fr">没有账号? <a href="{{:U('/Login/registered')}}" >立即注册</a></span>
+		</div>
+	</div>
+	
+	<!-- form -->
+	<div class="container"> 
+		<div class="title">
+			<ul>
+				<li><i class="fa fa-arrow-circle-right fa-fw"></i> 登录</li>
+				<img src="__PUBLIC__/Home/login_register/images/arrow.jpg" style="position:absolute" alt="">
+				<li><i class="fa fa-check-circle fa-fw"></i> 自助建站</li>
+			</ul>
+		</div>
+		<div class="form">
+			<form method="POST" action="{{:U('/Login/login')}}" onsubmit="return mysubmit();">
+	            <div>
+	                <p class="item-p">邮箱/用户名</p>
+	                <input type="text" name="user_name" class="form-control" value="" placeholder="邮箱 用户名" id="name">
+	            </div>
+	            <div class="item">
+	            	<p class="item-p">密码</p>
+	                <input type="password" class="form-control" name="user_password" placeholder="密码">
+	            </div>
+	            <div class="item" style="width:360px;">
+	            	<input type="checkbox" name="remember"> 记住
+	                <a href="{{:U('/Login/retrieve_pwd')}}" class="fr">忘记密码？</a>
+	            </div>
+	            <div class="item" style="width:360px;">
+	                <button type="submit">登录</button>
+	            </div>
+	        </form>
+	        <div style="width:200px;margin:0 auto;text-align:center;font-size:14px;color:#f00;margin-top:10px;" id="error">{{$Think.get.error|default=''}}</div>
+        </div>
+       <include file="footer" />
+	</div>
+</body>
+<script type="text/javascript">
+function mysubmit(){
+	var rep_name = /^[a-zA-Z][a-zA-Z0-9_]{4,20}$/;
+    var rep_email = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+    if(rep_name.test($('#name').val()) || rep_email.test($('#name').val())){
+        return true;
+    }else{
+    	$('#error').html('用户名不合法！');
+        return false;
+    }
+}
+
+
+</script>
+</html>

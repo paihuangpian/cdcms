@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>增加栏目</title>
+ <include file="Public/header" /><!-- b头部 -->
+ <include file="Public/left" /><!-- 左边栏 -->
+  <div class="container">
+  <include file="nav" /><!-- 头部 -->
+<style type="text/css">
+input{
+  width:380px;
+}
+
+table{
+  text-align:left;
+}
+
+</style> 
+<div style="margin-top:15%;margin-left:30%;width:520px;margin:0 auto;">
+    <form method="post" action="{{:U('Websites/column_add')}}">
+    <table>
+     <tr>
+        <td style="width:100px;">父级栏目:</td>
+        <td>
+          <select name="column_pid" style="width:386px;">
+            <option value="0">增加顶级栏目</option>
+            <foreach name="father" item="vo">
+              <option value="{{$vo['column_id']}}" 
+              <if condition="($vo['column_id'] eq $pid)">
+                selected
+              </if>
+              
+              >{{$vo['column_name']}}</option>
+
+            </foreach>
+          </select>
+        </td>
+    </tr>
+    <tr>
+        <td style="width:100px;">栏目名称:</td>
+        <td><input type="type" name="column_name"/></td>
+
+    </tr>
+    <tr>
+        <td style="width:100px;">栏目标题:</td>
+        <td><input type="type" name="column_title"/></td>
+    </tr>
+    <tr>
+        <td style="width:100px;">栏目关键词:</td>
+        <td><input type="type" name="column_keywords"/></td>
+    </tr>
+    <tr>
+        <td style="width:100px;">栏目描述:</td>
+        <td><textarea name="column_description" style="width:380px;height:100px;"></textarea></td>
+    </tr>
+    <tr>
+        <td style="width:100px;">栏目状态:</td>
+        <td style="text-align:left;">
+          <input name="column_status" type="radio" value="0" checked style="width:20px;" />显示
+          <input name="column_status" type="radio" value="1" style="width:20px;" />隐藏
+        </td>
+    </tr>
+   <tr style="text-align:center;">
+   <td colspan="2"><input type="submit" name="" value="添加" style="width:100px;margin-left:80px;"/></td>
+   </tr>
+    </table>
+    </form>
+</div>
+</div>
+</body>
+</html>

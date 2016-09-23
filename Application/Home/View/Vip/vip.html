@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>用户首页</title>
+	<include file="Public/header" /><!-- 头部 -->
+	<include file="Public/left" /><!-- 左边栏 -->
+	<div class="container">
+	<div class="content-tab">
+		<div class="title-tab">
+			<a href="javascript:;" class="active" id="aVip" onclick="showBox('aVip', 'vip');">会员特权</a>
+			<a href="javascript:;" id="aBase" onclick="showBox('aBase','base');">基本信息</a>
+			<a href="javascript:;" id="aPwd" onclick="showBox('aPwd','pwd');">修改密码</a>
+		</div>
+		<div class="content-tab" id="vip">
+			<table>
+				<tr><th>会员等级</th><th>特权</th></tr>
+				<tr><td>普通会员</td><td>1、******
+					2、******</td></tr>
+				<tr><td>VIP会员</td>
+					<td>1、******
+					2、******</td>
+				</tr>
+			</table>
+		</div>
+		<!-- 会员基本信息 -->
+		<div class="content-tab" style="display:none"  id="base">
+		<table>
+				<tr>
+					<td>ID</td>
+					<td>用户名</td>
+					<td>邮箱</td>
+					<td>会员级别</td>
+					<td>会员状态</td>
+					<td>注册时间</td>
+					<td>上次登录时间</td>
+				</tr>
+			<tr>
+				<foreach name="user" item="v">
+					<td>{{$v}}</td>
+				</foreach>
+			</tr>
+		</table>
+		</div>
+		<!-- /会员基本信息 -->
+		<style type="text/css">
+		.content-tab input{
+			width:220px;
+		}
+		.content-tab table td{
+			border:none;
+		}
+
+		</style>
+
+		<!-- 修改密码 -->
+		<div class="content-tab" style="display:none;width:95%;height:400px;background:url(__PUBLIC__/Home/images/pwd.png) no-repeat;"  id="pwd" >
+		<div style="width:200px;margin-left:255px;color:#f00;" id="error">{{$Think.get.error|default=''}}</div>
+		<form>
+			{__TOKEN__}
+			<table style="margin-top:45px;">
+				<tr>
+					<td style="width:100px;">原&nbsp;&nbsp;密&nbsp;&nbsp;码：</td>
+					<td><input type="password" name="pwd_j" id="pwd_j" /></td>
+				</tr>
+				<tr>
+					<td>新&nbsp;&nbsp;密&nbsp;&nbsp;码：</td>
+					<td><input type="password" name="pwd_x" id="pwd_x" /></td>
+				</tr>
+				<tr>
+					<td>确认密码：</td>
+					<td><input type="password" name="pwd_q" id="pwd_q" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><button type="button" style="width:100px;" onclick="sub();">保存</button></td>
+				</tr>
+			</table>
+		</form>
+		</div>
+		<!-- /修改密码 -->
+</div>
+		<div class="content-tab web" style="display:none"   id="web">
+			<div class="content-tab-1 clearfix">
+				<div class="content-tab-1-img">
+					<p><img src="__PUBLIC__/Home/images/bz.png" alt=""></p>
+					<p>营销型网站</p>
+				</div>
+				<div class="content-tab-1-text">
+					<p>会员价：<span class="cxj">398元</span>  <span class="yj">原价: 3800 元</span></p>
+					<p><a href="" class="check">一年</a><a href="" class="check active">四年</a><a href="" class="check">十年</a></p>
+					<p><a href="orders.html" class="action">立即购买</a><a href="carts.html" class="action">加入购物车</a>购买之后免费赠送四年会员 <a href="vip.html" style="color:#f60">会员特权</a></p>
+				</div>
+			</div>
+			<div class="content-tab-1 clearfix">
+				<div class="content-tab-1-img">
+					<p><img src="__PUBLIC__/Home/images/bz.png" alt=""></p>
+					<p>商城型网站</p>
+				</div>
+				<div class="content-tab-1-text">
+					<p>促销价：<span class="cxj">798元</span>  <span class="yj">原价: 8800 元</span></p>
+					<p><a href="" class="check active">一年</a><a href="" class="check">四年</a><a href="" class="check">十年</a></p>
+					<p><a href="orders.html" class="action">立即购买</a><a href="carts.html" class="action">加入购物车</a>购买之后免费赠送一年VIP会员 <a href="vip.html" style="color:#f60">VIP会员特权</a></p>
+				</div>
+			</div>
+		</div>
+		<div class="content-tab domain" style="display:none"  id="domain">
+			<p>
+				<img src="__PUBLIC__/Home/images/domain.png" alt="">
+			</p>
+		</div>
+		<div class="content-tab weigw" style="display:none"  id="weigw">
+			<p>
+				微官网，未开通
+			</p>
+		</div>
+		<div class="content-tab weifx" style="display:none"  id="weifx">
+			<p>
+				微分销，未开通
+			</p>
+		</div>
+		<div class="content-tab h5" style="display:none"  id="h5">
+			<p>
+				H5宣传页，未开通
+			</p>
+		</div>
+		<div class="content-tab app" style="display:none"  id="app">
+			<p>
+				手机app，未开通
+			</p>
+		</div>
+	</div>
+	<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+	<script>
+		function showBox(aitem, item){
+			$('#' + aitem).addClass('active');
+			$('#' + aitem).siblings('a').removeClass('active');
+			$('#' + item).show();
+			$('#' + item).siblings('div.content-tab').hide();
+		}
+	</script>
+</body>
+
+<script type="text/javascript">
+function sub(){
+	$('#error').html('');
+	if($('#pwd_j').val().length < 6){
+		$('#error').html('原密码6~20位之间！');
+	}else if($('#pwd_x').val().length < 6){
+		$('#error').html('新密码6~20位之间！');
+	}else if($('#pwd_q').val().length < 6){
+		$('#error').html('确认密码6~20位之间！');
+	}else if($('#pwd_x').val() != $('#pwd_q').val()){
+
+		$('#error').html('新密码与确认密码不一致！');
+	}else{
+
+		$.post("{{:U('Vip/Modify_pwd')}}",{'pwd_q':$('#pwd_q').val(),'pwd_j':$('#pwd_j').val(),'hash':$("input[name='__hash__']").val()},function(res){
+			if(res == 1){
+
+				$("#error").html('修改成功').css('color','#000');
+
+			}else{
+
+				$("#error").html(res);
+				
+			}
+		})
+		
+	}
+
+
+}
+
+
+</script>
+</html>

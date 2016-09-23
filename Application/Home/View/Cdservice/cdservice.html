@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>用户首页</title>
+	<include file="Public/header" /><!-- 头部 -->
+	<include file="Public/left" /><!-- 左边栏 -->
+	<div class="container">
+	<div class="content-tab">
+		<div class="title-tab">
+			<a href="javascript:;" id="aWeb" class="active" onclick="showBox('aWeb','web');">网站类型</a>
+			<a href="javascript:;"  id="aSeo" onclick="showBox('aSeo', 'seo');">SEO优化</a>
+			<a href="javascript:;"  id="aSem" onclick="showBox('aSem', 'sem');">SEM推广</a>
+			<a href="javascript:;"  id="aWeitjz" onclick="showBox('aWeitjz', 'weitjz');">委托建站</a>
+			<a href="javascript:;"  id="aGaoddz" onclick="showBox('aGaoddz', 'gaoddz');">高端定制</a>
+		</div>
+		<div class="content-tab web" id="web">
+			<div class="content-tab-1 clearfix">
+				<div class="content-tab-1-img">
+					<p><img src="__PUBLIC__/Home/images/bz.png" alt=""></p>
+					<p>营销型网站</p>
+				</div>
+				<div class="content-tab-1-text">
+					<p>会员价：<span class="cxj">398元</span>  <span class="yj">原价: 3800 元</span></p>
+					<p><a href="" class="check">一年</a><a href="" class="check active">四年</a><a href="" class="check">十年</a></p>
+					<p><a href="orders.html" class="action">立即购买</a><a href="carts.html" class="action">加入购物车</a>购买之后免费赠送四年会员 <a href="vip.html" style="color:#f60">会员特权</a></p>
+				</div>
+			</div>
+			<div class="content-tab-1 clearfix">
+				<div class="content-tab-1-img">
+					<p><img src="__PUBLIC__/Home/images/bz.png" alt=""></p>
+					<p>商城型网站</p>
+				</div>
+				<div class="content-tab-1-text">
+					<p>促销价：<span class="cxj">798元</span>  <span class="yj">原价: 8800 元</span></p>
+					<p><a href="" class="check active">一年</a><a href="" class="check">四年</a><a href="" class="check">十年</a></p>
+					<p><a href="orders.html" class="action">立即购买</a><a href="carts.html" class="action">加入购物车</a>购买之后免费赠送一年VIP会员 <a href="vip.html" style="color:#f60">VIP会员特权</a></p>
+				</div>
+			</div>
+		</div>
+		<div class="content-tab seo" style="display:none"  id="seo">
+			<p>广告位</p>
+			<table>
+				<tr><th>市场价</th><th>会员价</th><th>VIP会员</th><th>操作</th></tr>
+				<tr><td>3800元/月</td><td>2000元/月</td><td>1800元/月</td><td><a href="">详情</a> <a href="orders.html">立即购买</a> <a href="carts.html">加入购物车</a></td></tr>
+				<tr><td colspan="6">更多产品</td></tr>
+			</table>
+		</div>
+		<div class="content-tab app" style="display:none"  id="sem">
+			<p>广告位</p>
+			<table>
+				<tr><th>市场价</th><th>会员价</th><th>VIP会员</th><th>操作</th></tr>
+				<tr><td>3800元/月</td><td>2000元/月</td><td>1800元/月</td><td><a href="">详情</a> <a href="orders.html">立即购买</a> <a href="carts.html">加入购物车</a></td></tr>
+				<tr><td colspan="6">更多产品</td></tr>
+			</table>
+		</div>
+		<div class="content-tab weitjz" style="display:none"  id="weitjz">
+			<p>为什么要委托建站，适合那些企业和个人</p>
+			<table>
+				<tr><th>类型</th><th>市场价</th><th>会员价</th><th>VIP会员</th><th>周期</th><th>操作</th></tr>
+				<tr><td>全站图片设计</td><td>3800元/月</td><td>2000元/月</td><td>1800元/月</td><td>三天(会员) / 二天(VIP会员)</td><td><a href="">详情</a> <a href="orders.html">立即购买</a> <a href="carts.html">加入购物车</a></td></tr>
+				<tr><td colspan="6">更多产品</td></tr>
+			</table>
+		</div>
+		<div class="content-tab gaoddz" style="display:none"  id="gaoddz">
+			<p>定制的区别和优势</p>
+			<table>
+				<tr><th>类型</th><th>市场价</th><th>会员价</th><th>VIP会员</th><th>周期</th><th>操作</th></tr>
+				<tr><td>O2O</td><td>3800元/月</td><td>2000元/月</td><td>1800元/月</td><td>三天(会员) / 二天(VIP会员)</td><td><a href="">详情</a> <a href="orders.html">立即购买</a> <a href="carts.html">加入购物车</a></td></tr>
+				<tr><td colspan="6">更多产品</td></tr>
+			</table>
+		</div>
+	</div>
+		<div class="content-tab web" style="display:none"   id="web">
+			<div class="content-tab-1 clearfix">
+				<div class="content-tab-1-img">
+					<p><img src="images/bz.png" alt=""></p>
+					<p>营销型网站</p>
+				</div>
+				<div class="content-tab-1-text">
+					<p>会员价：<span class="cxj">398元</span>  <span class="yj">原价: 3800 元</span></p>
+					<p><a href="" class="check">一年</a><a href="" class="check active">四年</a><a href="" class="check">十年</a></p>
+					<p><a href="orders.html" class="action">立即购买</a><a href="carts.html" class="action">加入购物车</a>购买之后免费赠送四年会员 <a href="vip.html" style="color:#f60">会员特权</a></p>
+				</div>
+			</div>
+			<div class="content-tab-1 clearfix">
+				<div class="content-tab-1-img">
+					<p><img src="__PUBLIC__/Home/images/bz.png" alt=""></p>
+					<p>商城型网站</p>
+				</div>
+				<div class="content-tab-1-text">
+					<p>促销价：<span class="cxj">798元</span>  <span class="yj">原价: 8800 元</span></p>
+					<p><a href="" class="check active">一年</a><a href="" class="check">四年</a><a href="" class="check">十年</a></p>
+					<p><a href="orders.html" class="action">立即购买</a><a href="carts.html" class="action">加入购物车</a>购买之后免费赠送一年VIP会员 <a href="vip.html" style="color:#f60">VIP会员特权</a></p>
+				</div>
+			</div>
+		</div>
+		<div class="content-tab domain" style="display:none"  id="domain">
+			<p>
+				<img src="__PUBLIC__/Home/images/domain.png" alt="">
+			</p>
+		</div>
+		<div class="content-tab weigw" style="display:none"  id="weigw">
+			<p>
+				微官网，未开通
+			</p>
+		</div>
+		<div class="content-tab weifx" style="display:none"  id="weifx">
+			<p>
+				微分销，未开通
+			</p>
+		</div>
+		<div class="content-tab h5" style="display:none"  id="h5">
+			<p>
+				H5宣传页，未开通
+			</p>
+		</div>
+		<div class="content-tab app" style="display:none"  id="app">
+			<p>
+				手机app，未开通
+			</p>
+		</div>
+	</div>
+	<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+	<script>
+		function showBox(aitem, item){
+			$('#' + aitem).addClass('active');
+			$('#' + aitem).siblings('a').removeClass('active');
+			$('#' + item).show();
+			$('#' + item).siblings('div.content-tab').hide();
+		}
+	</script>
+</body>
+</html>

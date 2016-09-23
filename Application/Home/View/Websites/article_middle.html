@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>添加文章成功提示</title>
+	<style type="text/css">
+	li{
+		float:left;
+		list-style-type:none;
+		line-height: 50px;
+		margin-left: 20px;
+	}
+	a{
+		text-decoration:none;
+	}
+	</style>
+<include file="Public/header" /><!-- b头部 -->
+ <include file="Public/left" /><!-- 左边栏 -->
+  <div class="container">
+  <include file="nav" /><!-- 头部 -->
+<div style="width:100%;height:50px;background:#23779C;text-align: center;">
+<ul>
+	<li><a href="{{:U('Home/Article/article')}}?id={{$Think.get.aid|default=''}}" target="_blank">浏览文章</a></li>
+	<li><a href="{{:U('Websites/article_add')}}?cid={{$Think.get.cid|default=''}}">继续添加</a></li>
+	<li><a href="{{:U('Websites/article')}}?cid={{$Think.get.cid|default=''}}">文章列表</a></li>
+	<li><a href="{{:U('Websites/column')}}">栏目列表</a></li>
+</ul>
+</div>
+<div style="width:1000px;text-align: center;margin-top:20px;">{{$Think.get.prompt|default=''}}</div>
+</div>
+</body>
+</html>
