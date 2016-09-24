@@ -31,16 +31,16 @@ class WebsitesController extends CommonController
     		 	if($config_logo_pic){
     		 		S('config_logo_pic',$config_logo_pic);
     		 	}
-    			$usernamne   = session('homeuser.name');//获取用户名 上传图片用到的路径
-    			if(!file_exists('./Customer_Uploads/'.$usernamne)){
-    				mkdir('./Customer_Uploads/'.$usernamne);
+    			$username   = session('homeuser.name');//获取用户名 上传图片用到的路径
+    			if(!file_exists('./Customer_Uploads/'.$username)){
+    				mkdir('./Customer_Uploads/'.$username);
     			}
     			//上传缩略图
     			$upload = new \Think\Upload();// 实例化上传类    
                 $upload->maxSize   =     3145728 ;// 设置附件上传大小    
                 $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
                 $upload->rootPath  =     './Customer_Uploads';   
-                $upload->savePath  =      "./{$usernamne}/"; // 设置附件上传目录    // 上传文件     
+                $upload->savePath  =      "./{$username}/"; // 设置附件上传目录    // 上传文件     
                 $info   =   $upload->upload(); 
                 if($info){
                 	if($info['config_logo']){
@@ -221,7 +221,6 @@ class WebsitesController extends CommonController
     public function column_modify()
     {
         if(IS_POST){
-            // dump($_POST);exit;
             $pid = $_POST['column_pid'];
             $column = M('Cms_column');
             //查询父级路径
@@ -323,7 +322,7 @@ class WebsitesController extends CommonController
         if($cid){
             $count   = $article->where("article_column = {$cid} and article_userid =".session('homeuser.id'))->count();// 查询满足要求的总记录数
         }else{
-            $count   = $article->count();// 查询满足要求的总记录数
+            $count   = $article->where('article_userid ='.session('homeuser.id'))->count();// 查询满足要求的总记录数
         }
         $num     = 10;//每页显示的条数
         $number  =     ceil($count / $num);//页码数
@@ -356,16 +355,16 @@ class WebsitesController extends CommonController
             $status =  $_FILES['article_pic']['error'];
             if($status != 4){
                 //上传缩略图
-                $usernamne   = session('homeuser.name');//获取用户名 上传图片用到的路径
-                if(!file_exists('./Customer_Uploads/'.$usernamne)){
-                    mkdir('./Customer_Uploads/'.$usernamne);
+                $username   = session('homeuser.name');//获取用户名 上传图片用到的路径
+                if(!file_exists('./Customer_Uploads/'.$username)){
+                    mkdir('./Customer_Uploads/'.$username);
                 }
                 //上传缩略图
                 $upload = new \Think\Upload();// 实例化上传类    
                 $upload->maxSize   =     3145728 ;// 设置附件上传大小    
                 $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
                 $upload->rootPath  =     './Customer_Uploads';   
-                $upload->savePath  =      "./{$usernamne}/"; // 设置附件上传目录    // 上传文件     
+                $upload->savePath  =      "./{$username}/"; // 设置附件上传目录    // 上传文件     
                 $info   =   $upload->upload(); 
                 if(!$info) {// 上传错误提示错误信息        
                 $this->error($upload->getError());    
@@ -616,7 +615,7 @@ class WebsitesController extends CommonController
     {
          C('DB_PREFIX','cms_');
         $carousel   = D('Carousel');
-        $count      = $carousel->count();//总条数
+        $count      = $carousel->where('carousel_userid ='.session('homeuser.id'))->count();//总条数
         $num        = 4;//每页显示条数
         $number     = ceil($count / $num);//页数
         $page       = new \Think\Page($count,$num);// 
@@ -642,9 +641,9 @@ class WebsitesController extends CommonController
                 echo "<script>alert('令牌错误！');window.history.go(-1);</script>";
              }
             if($_FILES['carousel_pic']['error'] != 4){
-                 $usernamne   = session('homeuser.name');//获取用户名 上传图片用到的路径
-                if(!file_exists('./Customer_Uploads/'.$usernamne)){
-                    mkdir('./Customer_Uploads/'.$usernamne);
+                 $username   = session('homeuser.name');//获取用户名 上传图片用到的路径
+                if(!file_exists('./Customer_Uploads/'.$username)){
+                    mkdir('./Customer_Uploads/'.$username);
                 }
                 //如果是修改 查询原有图片 缓存起来 添加成功后删除
                 if($_GET['id']){
@@ -656,7 +655,7 @@ class WebsitesController extends CommonController
                 $upload->maxSize   =     3145728 ;// 设置附件上传大小    
                 $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型   
                 $upload->rootPath  =     './Customer_Uploads';   
-                $upload->savePath  =      "./{$usernamne}/"; // 设置附件上传目录    // 上传文件     
+                $upload->savePath  =      "./{$username}/"; // 设置附件上传目录    // 上传文件     
                 $info   =   $upload->upload(); 
                 if($info){
                     if($info['carousel_pic']){
