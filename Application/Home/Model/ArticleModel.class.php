@@ -24,7 +24,7 @@ class ArticleModel extends Model
 
 		$arr = array('开放浏览','关闭浏览');
 		foreach($article as &$v){
-			$res = $this->table('Cms_column')->where("{$v['article_column']} = column_id")->field('column_name')->find();
+			$res = $this->table('cms_column')->where("{$v['article_column']} = column_id")->field('column_name')->find();
 			$v['article_column'] = $res['column_name'];
 			$v['article_time'] = date('Y-m-d',$v['article_time']); 
 			$v['article_status'] = $arr[ $v['article_status'] ];

@@ -33,30 +33,30 @@ class WebsitesController extends CommonController
     		 	}
     			$username   = session('homeuser.name');//获取用户名 上传图片用到的路径
     			if(!file_exists('./Customer_Uploads/'.$username)){
-    				mkdir('./Customer_Uploads/'.$username);
+    				mkdir('./Customer_Uploads/'.$username,0777);
+                    chmod('./Customer_Uploads/'.$username,0777);
     			}
     			//上传缩略图
     			$upload = new \Think\Upload();// 实例化上传类    
                 $upload->maxSize   =     3145728 ;// 设置附件上传大小    
                 $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
                 $upload->rootPath  =     './Customer_Uploads';   
-                $upload->savePath  =      "./{$username}/"; // 设置附件上传目录    // 上传文件     
+                $upload->savePath  =      "{$username}/"; // 设置附件上传目录    // 上传文件     
                 $info   =   $upload->upload(); 
                 if($info){
                 	if($info['config_logo']){
 
-                		$_POST['config_logo'] = '/Customer_Uploads'.substr($info['config_logo']['savepath'].$info['config_logo']['savename'],1);
+                		$_POST['config_logo'] = '/Customer_Uploads'.$info['config_logo']['savepath'].$info['config_logo']['savename'];
                 	}
                 	if($info['config_pic']){
 
-                		$_POST['config_pic'] = '/Customer_Uploads'.substr($info['config_pic']['savepath'].$info['config_pic']['savename'],1);
+                		$_POST['config_pic'] = '/Customer_Uploads'.$info['config_pic']['savepath'].$info['config_pic']['savename'];
                 	}
                 	if($info['config_ico']){
 
-                		$_POST['config_ico'] = '/Customer_Uploads'.substr($info['config_ico']['savepath'].$info['config_ico']['savename'],1);
+                		$_POST['config_ico'] = '/Customer_Uploads'.$info['config_ico']['savepath'].$info['config_ico']['savename'];
                 	}
                 }else{
-
                 	$this->error($upload->getError()); 
                 }
     		}
@@ -314,7 +314,7 @@ class WebsitesController extends CommonController
 
         C('DB_PREFIX','cms_');
         $column = M('Column');
-        $columns = $column->field('column_id,column_name')->select();
+        $columns = $column->where('column_userid ='.session('homeuser.id'))->field('column_id,column_name')->select();
         $this->assign('columns',$columns);
 
         $cid =  I('cid');//接收所属栏目的id
@@ -357,19 +357,20 @@ class WebsitesController extends CommonController
                 //上传缩略图
                 $username   = session('homeuser.name');//获取用户名 上传图片用到的路径
                 if(!file_exists('./Customer_Uploads/'.$username)){
-                    mkdir('./Customer_Uploads/'.$username);
+                    mkdir('./Customer_Uploads/'.$username,0777);
+                    chmod('./Customer_Uploads/'.$username,0777);
                 }
                 //上传缩略图
                 $upload = new \Think\Upload();// 实例化上传类    
                 $upload->maxSize   =     3145728 ;// 设置附件上传大小    
                 $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
                 $upload->rootPath  =     './Customer_Uploads';   
-                $upload->savePath  =      "./{$username}/"; // 设置附件上传目录    // 上传文件     
+                $upload->savePath  =      "{$username}/"; // 设置附件上传目录    // 上传文件     
                 $info   =   $upload->upload(); 
                 if(!$info) {// 上传错误提示错误信息        
                 $this->error($upload->getError());    
                 }else{// 上传成功        
-                    $pic =  "./Customer_Uploads".substr($info['article_pic']['savepath'],1).$info['article_pic']['savename'];
+                    $pic =  "./Customer_Uploads".$info['article_pic']['savepath'].$info['article_pic']['savename'];
                     $image = new \Think\Image(); 
                     //图片剪切
                     $image->open($pic);
@@ -642,8 +643,9 @@ class WebsitesController extends CommonController
              }
             if($_FILES['carousel_pic']['error'] != 4){
                  $username   = session('homeuser.name');//获取用户名 上传图片用到的路径
-                if(!file_exists('./Customer_Uploads/'.$username)){
-                    mkdir('./Customer_Uploads/'.$username);
+               if(!file_exists('./Customer_Uploads/'.$username)){
+                    mkdir('./Customer_Uploads/'.$username,0777);
+                    chmod('./Customer_Uploads/'.$username,0777);
                 }
                 //如果是修改 查询原有图片 缓存起来 添加成功后删除
                 if($_GET['id']){
@@ -655,11 +657,11 @@ class WebsitesController extends CommonController
                 $upload->maxSize   =     3145728 ;// 设置附件上传大小    
                 $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型   
                 $upload->rootPath  =     './Customer_Uploads';   
-                $upload->savePath  =      "./{$username}/"; // 设置附件上传目录    // 上传文件     
+                $upload->savePath  =      "{$username}/"; // 设置附件上传目录    // 上传文件     
                 $info   =   $upload->upload(); 
                 if($info){
                     if($info['carousel_pic']){
-                        $_POST['carousel_pic'] = '/Customer_Uploads'.substr($info['carousel_pic']['savepath'].$info['carousel_pic']['savename'],1);
+                        $_POST['carousel_pic'] = '/Customer_Uploads'.$info['carousel_pic']['savepath'].$info['carousel_pic']['savename'];
                     }
                 }else{
                     $this->error($upload->getError()); 
@@ -798,16 +800,20 @@ class WebsitesController extends CommonController
                     S(session('homeuser.name').'friendship_logo',$pic['friendship_logo']);
                 }
                 $username = session('homeuser.name');
+                if(!file_exists('./Customer_Uploads/'.$username)){
+                    mkdir('./Customer_Uploads/'.$username,0777);
+                    chmod('./Customer_Uploads/'.$username,0777);
+                }
                 //上传缩略图
                 $upload = new \Think\Upload();// 实例化上传类    
                 $upload->maxSize   =     3145728 ;// 设置附件上传大小    
                 $upload->rootPath  =     './Customer_Uploads';   
-                $upload->savePath  =      "./{$username}/"; // 设置附件上传目录    // 上传文件     
+                $upload->savePath  =      "{$username}/"; // 设置附件上传目录    // 上传文件     
                 $info   =   $upload->upload(); 
                 if($info){
                     if($info['friendship_logo']){
 
-                        $_POST['friendship_logo'] = '/Customer_Uploads'.substr($info['friendship_logo']['savepath'].$info['friendship_logo']['savename'],1);
+                        $_POST['friendship_logo'] = '/Customer_Uploads'.$info['friendship_logo']['savepath'].$info['friendship_logo']['savename'];
                     }
                 }else{
                     $this->error($upload->getError()); 
