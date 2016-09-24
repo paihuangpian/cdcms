@@ -46,15 +46,15 @@ class WebsitesController extends CommonController
                 if($info){
                 	if($info['config_logo']){
 
-                		$_POST['config_logo'] = '/Customer_Uploads'.$info['config_logo']['savepath'].$info['config_logo']['savename'];
+                		$_POST['config_logo'] = '/Customer_Uploads/'.$info['config_logo']['savepath'].$info['config_logo']['savename'];
                 	}
                 	if($info['config_pic']){
 
-                		$_POST['config_pic'] = '/Customer_Uploads'.$info['config_pic']['savepath'].$info['config_pic']['savename'];
+                		$_POST['config_pic'] = '/Customer_Uploads/'.$info['config_pic']['savepath'].$info['config_pic']['savename'];
                 	}
                 	if($info['config_ico']){
 
-                		$_POST['config_ico'] = '/Customer_Uploads'.$info['config_ico']['savepath'].$info['config_ico']['savename'];
+                		$_POST['config_ico'] = '/Customer_Uploads/'.$info['config_ico']['savepath'].$info['config_ico']['savename'];
                 	}
                 }else{
                 	$this->error($upload->getError()); 
@@ -370,7 +370,7 @@ class WebsitesController extends CommonController
                 if(!$info) {// 上传错误提示错误信息        
                 $this->error($upload->getError());    
                 }else{// 上传成功        
-                    $pic =  "./Customer_Uploads".$info['article_pic']['savepath'].$info['article_pic']['savename'];
+                    $pic =  "./Customer_Uploads/".$info['article_pic']['savepath'].$info['article_pic']['savename'];
                     $image = new \Think\Image(); 
                     //图片剪切
                     $image->open($pic);
@@ -661,7 +661,7 @@ class WebsitesController extends CommonController
                 $info   =   $upload->upload(); 
                 if($info){
                     if($info['carousel_pic']){
-                        $_POST['carousel_pic'] = '/Customer_Uploads'.$info['carousel_pic']['savepath'].$info['carousel_pic']['savename'];
+                        $_POST['carousel_pic'] = '/Customer_Uploads/'.$info['carousel_pic']['savepath'].$info['carousel_pic']['savename'];
                     }
                 }else{
                     $this->error($upload->getError()); 
@@ -813,7 +813,7 @@ class WebsitesController extends CommonController
                 if($info){
                     if($info['friendship_logo']){
 
-                        $_POST['friendship_logo'] = '/Customer_Uploads'.$info['friendship_logo']['savepath'].$info['friendship_logo']['savename'];
+                        $_POST['friendship_logo'] = '/Customer_Uploads/'.$info['friendship_logo']['savepath'].$info['friendship_logo']['savename'];
                     }
                 }else{
                     $this->error($upload->getError()); 
