@@ -5,62 +5,33 @@ use Think\Controller;
 class AdminsController extends CommonController{
 
 	public function index(){
-		$get = I('get.');
-		$m = D('Admins');
-		$num = 2;
-		$count = $m->count('id');
-		$page = new \Think\Page( $count, $num );
-		$show = $page->show();
-		$list =	$m->limit( $page->firstRow.','.$page->listRow, $num )->select();
-		$this->assign( 'list', $list );
-		$this->assign( 'show', $show );
-		$content = $this->fetch(T('Admins/index'));
-		if( $list ) return $this->ajaxReturn( ajaxData( $content, 1 ) );
-		return $this->ajaxReturn( ajaxData( null, 0 ) );
+		$get = $this->Get;
+		$content = $this->fnPage( 'Admins', 'Admins/index', 5 );
+		return $this->fnAjax( $content[0], $content[1] );
 	}
 
 	public function detail(){
-		$get = I('get.');
-		$m = D('Admins');
-		$row = $m->where($get)->find();
-		if( $row ) return $this->ajaxReturn( ajaxData( $row, 1 ) );
-		return $this->ajaxReturn( ajaxData( null, 0 ) );
+		$get = $this->Get;
+		$res = $this->fnDetail( $get['id'], 'Admins', 'password', true );
+		return $this->fnAjax( $res[0], $res[1] );
 	}
 
 	public function edit(){
-		$post = I('post.');
-		$post = array_filter($post);
-		$m = D('Admins');
-		$wh = [
-			'id'=>$post['id'],
-			'password'=>md5($post['password']),
-		];
-		$post['password'] = md5($post['passwords']);
-		$row = $m->where($wh)->save($post);
-		if( $row ) {
-			return $this->ajaxReturn( ajaxData( '编辑成功！', 1 ) );
-		}
-		return $this->ajaxReturn( ajaxData( '密码认证错误！', 0 ) );
+		$post = $this->Post;
+		$res = $this->fnEdit( 'Admins', $post );
+		return $this->fnAjax( $res[0], $res[1], U('index') );
 	}
 
 	public function add(){
 		$post = $this->Post;
-		$m = D('Admins');
-		$res = $m->add($post);
-		if( $res ){
-			return $this->ajaxReturn( ajaxData( $post, 1 ) );
-		}
-		return $this->ajaxReturn( ajaxData( '添加失败！', 0 ) );
+		$res = $this->fnAdd( 'Admins', $post );
+		return $this->fnAjax( $res[0], $res[1], U('index') );
 	}
 
 	public function del(){
 		$get = $this->Get;
-		$m = D('Admins');
-		$res = $m->delete($get);
-		if( $res ){
-			return $this->ajaxReturn( ajaxData( '删除成功！', 1 ) );
-		}
-		return $this->ajaxReturn( ajaxData( '删除失败！', 0 ) );
+		$res = $this->fnDel( $get['id'], 'Admins' );
+		return $this->fnAjax( $res[0], $res[1], U('index') );
 	}
 
 }

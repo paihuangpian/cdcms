@@ -17,19 +17,17 @@ class LoginController extends Controller{
 		if( !check_verify($post['verify']) ) return $this->ajaxReturn( ajaxData( '验证码错误！', 0 ) );
 
 		$m = D('admins');
+		$res = $m->fn_login( $m, $post );
 
-		$sql = [ 'name'=>$post['name'], 'password'=>md5($post['password']) ];
-		$row = $m->where($sql)->find();
-
-		if( $row ){
-			$data = [ 'last'=>date('Y-m-d:H:i:s',time()), 'ip'=>get_client_ip() ];
-			$m->where( 'id='.$row['id'] )->save($data);
-			session( array('name'=>'session_id','expire'=>18000) );
-			session( 'user', $row );
+		if( $res ){
+			$data = [ 'ip'=>get_client_ip() ];
+			$m->where( 'id='.$res['id'] )->save($data);
+			session( 'user', $res );
+			session( 'user.last', date('Y-m-d H:s:i',time()) );
 			return $this->ajaxReturn( ajaxData( '登录成功！', 1, U('Index/index') ) );
 		}
 
-		return $this->ajaxReturn( ajaxData( '用户名或密码错误！', 0 )  );
+		return $this->ajaxReturn( ajaxData( $m->msg, 0 )  );
 	}
 
 	public function verify( $config = null ){
@@ -47,6 +45,8 @@ class LoginController extends Controller{
 	}
 
 	public function logout(){
+		$data = [ 'last'=>session('user.last') ];
+		D('admins')->where( 'id='.session('user.id') )->save($data);
 		session( '[destroy]' );
 		return $this->redirect('Login/index');
 	}

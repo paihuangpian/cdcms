@@ -1,7 +1,9 @@
 <div class="top">
 	<p><i class="icon-list"></i><span>管理员列表</span></p>
 	<ul>
-		<li data-toggle="modal" data-target="#myAdmin-add"><i class="icon-plus-sign-alt"></i></li>
+		<li data-toggle="modal" style="cursor: pointer;" onclick="fnEmptyInput(inputAdmin_add)" data-target="#myAdmin-add">
+			<i class="icon-plus-sign-alt"></i>
+		</li>
 	</ul>
 </div>
 <div class="users">
@@ -20,8 +22,8 @@
 				<td><{$vo.last}></td>
 				<td><{$vo.ip}></td>
 				<td>
-					<a onclick="return detail( this.href, inputAdmin )" href="<php>echo U('Admin/Admins/detail/id/'.$vo['id']);</php>" data-toggle="modal" data-target="#myAdmin">编辑</a>/
-					<a onclick="return detail( this.href, inputUser )" href="<php>echo U('Admin/Users/detail/id/'.$vo['id']);</php>" data-toggle="modal" data-target="#myUser">删除</a>
+					<a onclick="return fnDetail( this.href, '#fmAdmin' )" href="<php>echo U('Admin/Admins/detail/id/'.$vo['id']);</php>" data-toggle="modal" data-target="#myAdmin">编辑</a>/
+					<a onclick="return del( this.href )" href="<php>echo U('Admin/Admins/del/id/'.$vo['id']);</php>">删除</a>
 				</td>
 			</tr>
 		</foreach>

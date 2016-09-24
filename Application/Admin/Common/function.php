@@ -1,5 +1,4 @@
 <?php 
-
 function check_verify($code, $id = ''){
     $verify = new \Think\Verify();
     return $verify->check($code, $id);
@@ -17,9 +16,11 @@ function push(){
 	}
 	return false;
 }
+
 function ajaxData( $arr, $state, $url=null ){
 	return [ 'arr'=>$arr, 'status'=>$state, 'url'=>$url ];
 }
+
 
 function Referer(){
 	$host = parse_url($_SERVER['HTTP_REFERER']);

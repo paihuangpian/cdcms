@@ -1,17 +1,20 @@
 <div class="top">
 	<p><i class="icon-list"></i><span>商品列表</span></p>
 	<ul>
-		<li><a href="#">Home</a></li>
+		<li data-toggle="modal" style="cursor: pointer;" onclick="fnEmptyInput(inputGoods)" data-target="#myGoods">
+			<i class="icon-plus-sign-alt"></i>
+		</li>
 	</ul>
 </div>
 <div class="admins">
 	<table class="table table-hover">
 		<tr>
 			<th>ID</th>
-			<th>用户名</th>
-			<th>用户等级</th>
-			<th>E-mail</th>
-			<th>注册时间</th>
+			<th>商品名</th>
+			<th>商品图</th>
+			<th>市场价</th>
+			<th>会员价</th>
+			<th>类型</th>
 			<th>状态</th>
 			<th>操作</th>
 		</tr>
@@ -19,11 +22,15 @@
 			<tr>
 				<td><{$vo.id}></td>
 				<td><{$vo.name}></td>
-				<td><{$vo.level}></td>
-				<td><{$vo.email}></td>
-				<td><{$vo.create_at}></td>
+				<td><img style="max-width: 100px;" src="<{$vo.thumbnail}>" /></td>
+				<td><{$vo.price}></td>
+				<td><{$vo.price_vip}></td>
+				<td><{$vo.type}></td>
 				<td><{$vo.status}></td>
-				<td><a onclick="return detail( this.href, inputUser )" href="<php>echo U('Admin/Users/detail/id/'.$vo['id']);</php>" data-toggle="modal" data-target="#myUser">查看</a></td>
+				<td>
+					<a onclick="return fnDetail( this.href, '#fmGoods' )" href="<php>echo U('Admin/Goods/detail/id/'.$vo['id']);</php>" data-toggle="modal" data-target="#myGoods">编辑</a>
+					<a onclick="return del( this.href )" href="<php>echo U('Admin/Goods/del/id/'.$vo['id']);</php>">删除</a>
+				</td>
 			</tr>
 		</foreach>
 	</table>

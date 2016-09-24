@@ -1,0 +1,32 @@
+<div class="top">
+	<p><i class="icon-list"></i><span>商品类型</span></p>
+	<ul>
+		<li>添加类型</li>
+	</ul>
+</div>
+<div class="admins">
+	<table class="table table-hover">
+		<tr>
+			<th>ID</th>
+			<th>类型名</th>
+			<th>用户等级</th>
+			<th>操作</th>
+		</tr>
+		<foreach name="list" item="vo">
+			<tr>
+				<td><{$vo.id}></td>
+				<td><{$vo.name}></td>
+				<td><{$vo.level}></td>
+				<td>
+					<a onclick="return detail( this.href, inputUser )" href="<php>echo U('Admin/Goods/detail/id/'.$vo['id']);</php>" data-toggle="modal" data-target="#myUser">编辑</a>
+					<a onclick="return detail( this.href, inputUser )" href="<php>echo U('Admin/Goods/del/id/'.$vo['id']);</php>" data-toggle="modal" data-target="#myUser">删除</a>
+				</td>
+			</tr>
+		</foreach>
+	</table>
+	<nav class="page">
+		<ul class="pagination">
+			<{$show}>
+		</ul>
+	</nav>
+</div>

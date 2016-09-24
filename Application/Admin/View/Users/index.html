@@ -23,7 +23,10 @@
 				<td><{$vo.email}></td>
 				<td><{$vo.create_at}></td>
 				<td><{$vo.status}></td>
-				<td><a onclick="return detail( this.href, inputUser )" href="<php>echo U('Admin/Users/detail/id/'.$vo['id']);</php>" data-toggle="modal" data-target="#myUser">查看</a></td>
+				<td>
+					<a onclick="return fnDetail( this.href, '#fmUser' )" href="<php>echo U('Admin/Users/detail/id/'.$vo['id']);</php>" data-toggle="modal" data-target="#myUser">查看</a>
+					<a onclick="return del( this.href )" href="<php>echo U('Admin/Users/del/id/'.$vo['id']);</php>">删除</a>
+				</td>
 			</tr>
 		</foreach>
 	</table>

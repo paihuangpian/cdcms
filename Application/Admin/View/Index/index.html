@@ -11,9 +11,9 @@
 	<script type="text/javascript" src="__PUBLIC__/Admin/Script/jquery-3.1.0.min.js"></script>
 	<script type="text/javascript" src="__PUBLIC__/Admin/Bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+		var modaly = null;
 		function fnPage(){
 			var page = $('.pagination div').children();
-			var modaly = $('.body .right .modaly');
 			modaly.fadeIn();
 			$('.pagination div').remove();
 			$('.pagination').html(page);
@@ -33,20 +33,24 @@
 		}
 		
 		$(document).ready(function(){
-			var modaly = $('.body .right .modaly');
-			$('.mtr_nav li').click(function(){
+			modaly = $('.body .right .modaly');
+			$('.mtr_nav li[url]').click(function(){
 				$('.mtr_nav li').removeClass('action');
 				$(this).addClass('action');
-				modaly.fadeIn();
-				$.get($(this).attr('url'), {index:'0'}, function(data){
-					if( data.status ){
-						$('.body .right .content').html(data.arr);
-						fnPage();
-						modaly.fadeOut();
-					}
-				});
+				fnRef( $(this).attr('url') );
 				return false;
 			});
+			var ul = $('.body .left .mtr_nav .son');
+			var ulHeight = {};
+			$.each( ul, function( key, value ){
+				ulHeight[key] = $(value).height();
+			} );
+			ul.height(0);
+			$('.body .left .mtr_nav>li').click(function(){
+				var index = $('.body .left .mtr_nav>li').index($(this));
+				ul.eq(index).siblings('ul').height(0);
+				ul.eq(index).height(ulHeight[index]);
+			})
 		});
 
 		function msg( s, t, m ){
@@ -55,35 +59,137 @@
 			$('.modal-header .alert[role="alert"]').css('opacity','1');
 			setTimeout(function(){
 				$('.modal-header .alert[role="alert"]').css('opacity','0');
-			},2000);
+			},4000);
 		}
 
 		function detail( url, val, m ){
+			fnEmptyInput(val);
 			$.get(url, {}, function(data){
 				$.each(data.arr, function(n,value){
-					$(val[n]).attr( 'placeholder', value );
+					if( n == 'thumbnail' ){
+						$(val[n]).attr( 'src', value );
+					}
+					else{
+						$(val[n]).attr( 'placeholder', value );
+					}
 				});
 			});
 			return false;
 		}
+		function fnEmptyInput( val ){
+			$.each(val, function(key,value){
+				$(value).val() ? $(value).val('') : '';
+				//$(value).attr('placeholder') ? $(value).attr( 'placeholder','' ) : '';
+				$(value).attr('src') ? $(value).attr( 'src', '' ) : '';
+			});
+		}
+		
+		function fnRef( url, show ){
+			show || modaly.fadeIn();
+			$.get(url, {index:'0'}, function(data){
+				if( data.status ){
+					$('.body .right .content').html(data.arr);
+					fnPage();
+				}
+				modaly.fadeOut();
+			});
+		}
 
-		function fnSubmit( url, val ){
+		function fnSubmit( url, val, table ){
 			var oData = {};
 			$.each(val, function(n,value){
 				if( typeof( value.attr('readonly') ) == 'undefined' ){
-					oData[n] = $(value).val();
+					if( n == 'id' ){
+						oData[n] = $(value).attr("placeholder");
+					}else if( n == 'thumbnail' ){
+						oData[n] = $(value).attr('src');
+					}else{
+						oData[n] = $(value).val();
+					}
 				}
 			});
-			oData['id'] = $('#inputID').attr("placeholder");
+			//console.log(oData);return false;
 			$.post(url, oData, function(data){
 				if( data.status ){
 					msg( 'alert-danger', 'alert-success', data.arr );
 					setTimeout(function(){
-						$('#myAdmin').fadeOut();
+						$(table).fadeOut();
+						data.url ? fnRef(data.url) : '';
 					},1000);
 				}else{
 					msg( 'alert-success', 'alert-danger', data.arr );
 				}
+			});
+			return false;
+		}
+
+		function del( url ){
+			if(window.confirm( '是否要删除该数据？删除后不可恢复' )){
+				modaly.fadeIn();
+				$.get(url, {}, function(data){
+					fnRef(data.url,true);
+				});
+			}
+			return false;
+		}
+
+		function fnSit( t, tpl ){
+			var url = t.action;
+			var oInput  = 	getInput( t, true );
+			$.post( url, oInput, function( data ){
+				if( data.status ){
+					msg( 'alert-danger', 'alert-success', data.arr );
+					setTimeout( function(){
+						$(tpl).fadeOut();
+						data.url ? fnRef( data.url ) : '';
+					}, 1000 );
+				}else{
+					msg( 'alert-success', 'alert-danger', data.arr );
+				}
+			});
+			return false;
+		}
+
+		function getInput( t, val ){
+			var input = $(t).find('[fmName]');
+			var oInput = {};
+			if( val ){
+				$.each( input, function( key, value ){
+					oInput[ $(value).attr('fmName') ] = $(value).val();
+				});
+			}else{
+				$.each( input, function( key, value ){
+					oInput[ $(value).attr('fmName') ] = value;
+				});
+			}
+			
+			return oInput;
+		}
+
+		function fnDetail( url,t ){
+			var oInput = getInput(t);
+			var oArr = {
+				'thumbnail' : 'src',
+				'id' : 'value',
+			};
+
+			var the = null;
+			fnEmptyInput(oInput);
+			$.get( url, {}, function( data ){
+				$.each( data.arr, function( key, value ){
+					$.each( oArr, function( k, v ){
+						if( key == k ){
+							$( oInput[key] ).attr( v, value );
+							the = 1;
+							return false;
+						}
+					});
+					if( the ) {
+						the = 0;
+						return true;
+					}
+					$( oInput[key] ).attr( 'placeholder', value );
+				});
 			});
 			return false;
 		}
@@ -103,6 +209,15 @@
 			padding: 10px 0;
 			font-family: '微软雅黑';
     		font-size: 15px;
+		}
+		.body .left .mtr_nav .son{
+			padding: 0;
+			font-family: '微软雅黑';
+    		font-size: 15px;
+    		background: #374452;
+   	 		padding: 0;
+   	 		overflow: hidden;
+   	 		transition: height 1s;
 		}
 		.mtr_nav li{
 			padding: 10px 15px;
@@ -187,10 +302,18 @@
 		<div class="left">
 			<ul class="mtr_nav">
 				<li url="<{:U('Index/index')}>"><i class="icon-home"></i>返回首页</li>
+				<ul class="son"></ul>
 				<li url="<{:U('Admins/index')}>"><i class="icon-cog"></i>管理中心</li>
+				<ul class="son"></ul>
 				<li url="<{:U('Users/index')}>"><i class="icon-user"></i>用户管理</li>
+				<ul class="son"></ul>
 				<li><i class="icon-sitemap"></i>商品管理</li>
-				<li><i class="icon-tags"></i>订单管理</li>
+				<ul class="son">
+					<li url="<{:U('Goods/index')}>"><i class="icon-circle-blank"></i>商品列表</li>
+					<li url="<{:U('Goods/typeList')}>"><i class="icon-circle-blank"></i>商品类型</li>
+				</ul>
+				<li url="<{:U('Orders/index')}>"><i class="icon-tags"></i>订单管理</li>
+				<ul class="son"></ul>
 			</ul>
 		</div>
 		<div class="right">
@@ -212,41 +335,42 @@
 	        		<h4 class="modal-title" id="myModalLabel">用户信息</h4>
 	      		</div>
 	      		<div class="modal-body">
-		      	<form class="form-horizontal" role="form">
+		      	<form id="fmUser" class="form-horizontal" role="form">
+		      		<input type="hidden" fmName="id" value="id">
 		      		<div class="form-group">
 				    	<label for="inputName" class="col-sm-2 control-label">用户名</label>
 				    	<div class="col-sm-10">
-				      		<input type="text" readonly class="form-control" id="inputName" placeholder="UserName">
+				      		<input type="text" fmName="name" readonly class="form-control" id="inputName" placeholder="UserName">
 				    	</div>
 				  	</div>
 				  	<div class="form-group">
 				    	<label for="inputEmail" class="col-sm-2 control-label">Email</label>
 				    	<div class="col-sm-10">
-				      		<input type="email" readonly class="form-control" id="inputEmail" placeholder="1191249254@qq.com">
+				      		<input type="email" fmName="email" readonly class="form-control" id="inputEmail" placeholder="1191249254@qq.com">
 				    	</div>
 				  	</div>
 				  	<div class="form-group">
 				    	<label for="inputTel" class="col-sm-2 control-label">联系电话</label>
 				    	<div class="col-sm-10">
-				      		<input type="text" readonly class="form-control" id="inputTel" placeholder="15677793470">
+				      		<input type="text" fmName="mobile" readonly class="form-control" id="inputTel" placeholder="15677793470">
 				    	</div>
 				  	</div>
 				  	<div class="form-group">
 				    	<label for="inputTime" class="col-sm-2 control-label">注册时间</label>
 				    	<div class="col-sm-10">
-				      		<input type="text" readonly class="form-control" id="inputTime" placeholder="2016-6-1 13:30:00">
+				      		<input type="text" fmName="create_at" readonly class="form-control" id="inputTime" placeholder="2016-6-1 13:30:00">
 				    	</div>
 				  	</div>
 				  	<div class="form-group">
 				    	<label for="inputLevel" class="col-sm-2 control-label">等级</label>
 				    	<div class="col-sm-10">
-				      		<input type="text" readonly class="form-control" id="inputLevel" placeholder="普通用户">
+				      		<input type="text" fmName="level" readonly class="form-control" id="inputLevel" placeholder="普通用户">
 				    	</div>
 				  	</div>
 				  	<div class="form-group">
 				    	<label for="inputStatus" class="col-sm-2 control-label">状态</label>
 				    	<div class="col-sm-10">
-				      		<input type="text" readonly class="form-control" id="inputStatus" placeholder="正常">
+				      		<input type="text" fmName="status" readonly class="form-control" id="inputStatus" placeholder="正常">
 				    	</div>
 				  	</div>
 				</form>
@@ -262,7 +386,7 @@
 	<!-- 管理员信息 -->
 	<div class="modal fade" id="myAdmin" data-remote="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 	  	<div class="modal-dialog">
-	  		<form class="form-horizontal" action="<{:U('Admins/edit')}>" role="form" method="post" onsubmit="return fnSubmit( this.action, inputAdmin )">
+	  		<form id="fmAdmin" class="form-horizontal" action="<{:U('Admins/edit')}>" role="form" method="post" onsubmit="return fnSit( this, '#myAdmin' )">
 	    		<div class="modal-content">
 		      		<div class="modal-header">
 		        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -270,35 +394,35 @@
 		        		<div class="alert alert-success alert-dismissible text-center" style="opacity: 0;transition: opacity 1s;margin:0;padding: 10px;" role="alert">role="alert"</div>
 		      		</div>
 	      			<div class="modal-body">
-	      				<input type="hidden" readonly class="form-control" id="inputID" placeholder="UserName">
+	      				<input type="hidden" fmName="id" value="id" >
 			      		<div class="form-group">
 					    	<label for="inputName" class="col-sm-2 control-label">管理员名</label>
 					    	<div class="col-sm-10">
-					      		<input type="text" class="form-control" id="inputUserName" placeholder="UserName">
+					      		<input type="text" fmName="name" class="form-control" id="inputUserName" placeholder="UserName">
 					    	</div>
 					  	</div>
 					  	<div class="form-group">
 					    	<label for="inputPassword" class="col-sm-2 control-label">原密码</label>
 					    	<div class="col-sm-10">
-					      		<input type="password" class="form-control" id="inputPassword" placeholder="原密码">
+					      		<input type="password" fmName="password" class="form-control" id="inputPassword" placeholder="原密码">
 					    	</div>
 					  	</div>
 					  	<div class="form-group">
 					    	<label for="inputPasswords" class="col-sm-2 control-label">新密码</label>
 					    	<div class="col-sm-10">
-					      		<input type="password" class="form-control" id="inputPasswords" placeholder="新密码">
+					      		<input type="password" fmName="passwords" class="form-control" id="inputPasswords" placeholder="新密码">
 					    	</div>
 					  	</div>
 					  	<div class="form-group">
 					    	<label for="inputLast" class="col-sm-2 control-label">登录时间</label>
 					    	<div class="col-sm-10">
-					      		<input type="text" readonly class="form-control" id="inputLast" placeholder="1191249254@qq.com">
+					      		<input type="text" readonly fmName="last" class="form-control" id="inputLast" placeholder="1191249254@qq.com">
 					    	</div>
 					  	</div>
 					  	<div class="form-group">
 					    	<label for="inputIP" class="col-sm-2 control-label">登录IP</label>
 					    	<div class="col-sm-10">
-					      		<input type="text" readonly class="form-control" id="inputIP" placeholder="15677793470">
+					      		<input type="text" readonly fmName="ip" class="form-control" id="inputIP" placeholder="15677793470">
 					    	</div>
 					  	</div>
 	      			</div>
@@ -314,7 +438,7 @@
 	<!-- 管理员添加 -->
 	<div class="modal fade" id="myAdmin-add" data-remote="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 	  	<div class="modal-dialog">
-	  		<form class="form-horizontal" action="<{:U('Admins/add')}>" role="form" method="post" onsubmit="return fnSubmit( this.action, inputAdmin_add )">
+	  		<form id="fmAdmin_add" class="form-horizontal" action="<{:U('Admins/add')}>" role="form" method="post" onsubmit="return fnSit( this, '#myAdmin-add' )">
 	    		<div class="modal-content">
 		      		<div class="modal-header">
 		        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -325,19 +449,189 @@
 			      		<div class="form-group">
 					    	<label for="inputName" class="col-sm-2 control-label">管理员名</label>
 					    	<div class="col-sm-10">
-					      		<input type="text" class="form-control" id="inputNamea" placeholder="UserName">
+					      		<input type="text" fmName="name" class="form-control" id="inputNamea" placeholder="UserName">
 					    	</div>
 					  	</div>
 					  	<div class="form-group">
 					    	<label for="inputPassword" class="col-sm-2 control-label">密码</label>
 					    	<div class="col-sm-10">
-					      		<input type="password" class="form-control" id="inputPassworda" placeholder="密码">
+					      		<input type="password" fmName="password" class="form-control" id="inputPassworda" placeholder="密码">
 					    	</div>
 					  	</div>
 					  	<div class="form-group">
-					    	<label for="inputPasswords" class="col-sm-2 control-label">确认密码</label>
+					    	<label for="adminPwds" class="col-sm-2 control-label">确认密码</label>
 					    	<div class="col-sm-10">
-					      		<input type="password" class="form-control" id="inputPasswordsa" placeholder="确认密码">
+					      		<input type="password" fmName="passwords" class="form-control" id="adminPwds" placeholder="确认密码">
+					    	</div>
+					  	</div>
+	      			</div>
+			      	<div class="modal-footer">
+			        	<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			        	<button type="submit" class="btn btn-primary">提交</button>
+			      	</div>
+	    		</div>
+	    	</form>
+	  	</div>
+	</div>
+
+	<div class="modal fade" id="myOrder" data-remote="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	  	<div class="modal-dialog" style="display:table; width: auto;">
+	  		<form id="fmOrder" class="form-horizontal" action="<{:U('Orders/index')}>" role="form" method="post" onsubmit="return fnSit( this, '#myOrder' )">
+	    		<div class="modal-content">
+		      		<div class="modal-header">
+		        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        		<h4 class="modal-title" id="myModalLabel">订单详情</h4>
+		        		<div class="alert alert-success alert-dismissible text-center" style="opacity: 0;transition: opacity 1s;margin:0;padding: 10px;" role="alert">role="alert"</div>
+		      		</div>
+		      		<input type="hidden" fmName="id" value="id" />
+	      			<div class="modal-body">
+	      				<p>基本信息</p>
+			      		<table class="table table-hover">
+							<tr>
+								<th>订单号</th>
+								<th>总金额</th>
+								<th>订单状态</th>
+								<th>下单时间</th>
+								<th>支付方式</th>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" readonly fmName="number" class="form-control" id="inputNumber" placeholder="订单号">
+								</td>
+								<td>
+									<input type="text" readonly fmName="oprice" class="form-control" id="inputPrice" placeholder="总金额">
+								</td>
+								<td>
+									<input type="text" readonly fmName="ostatus" class="form-control" id="inputStatus1" placeholder="状态">
+								</td>
+								<td>
+									<input type="text" readonly fmName="create_time" class="form-control" id="inputCreate_time" placeholder="下单时间">
+								</td>
+								<td>
+									<input type="text" readonly fmName="pay_type" class="form-control" id="inputPay_type" placeholder="支付方式">
+								</td>
+							</tr>
+						</table>
+						<p>会员信息</p>
+						<table class="table table-hover">
+							<tr>
+								<th>会员名</th>
+								<th>注册邮箱</th>
+								<th>联系电话</th>
+								<th>等级</th>
+								<th>状态</th>
+								<th>创建时间</th>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" readonly class="form-control" fmName="uname" id="inputNumber" placeholder="会员名">
+								</td>
+								<td>
+									<input type="text" readonly class="form-control" fmName="email" id="inputUser_id" placeholder="下单人">
+								</td>
+								<td>
+									<input type="text" readonly class="form-control" fmName="mobile" id="inputPrice" placeholder="总金额">
+								</td>
+								<td>
+									<input type="text" readonly class="form-control" fmName="level" id="inputStatus1" placeholder="状态">
+								</td>
+								<td>
+									<input type="text" readonly class="form-control" fmName="ustatus" id="inputCreate_time" placeholder="下单时间">
+								</td>
+								<td>
+									<input type="text" readonly class="form-control" fmName="create_at" id="inputPay_type" placeholder="支付方式">
+								</td>
+							</tr>
+						</table>
+						<p>商品信息</p>
+						<table class="table table-hover">
+							<tr>
+								<th>商品名</th>
+								<th>商品图</th>
+								<th>数量</th>
+								<th>市场价</th>
+								<th>会员价</th>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" readonly class="form-control" fmName="sname" placeholder="商品名">
+								</td>
+								<td>
+									<img style="max-width: 150px;" fmName="thumbnail" src="" />
+								</td>
+								<td>
+									<input type="text" readonly class="form-control" fmName="cnum" placeholder="数量">
+								</td>
+								<td>
+									<input type="text" readonly class="form-control" fmName="sprice" placeholder="市场价">
+								</td>
+								<td>
+									<input type="text" readonly class="form-control" fmName="sprice_vip" placeholder="会员价">
+								</td>
+							</tr>
+						</table>
+	      			</div>
+			      	<div class="modal-footer">
+			        	<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			        	<button type="submit" class="btn btn-primary">提交</button>
+			      	</div>
+	    		</div>
+	    	</form>
+	  	</div>
+	</div>
+
+	<div class="modal fade" id="myGoods" data-remote="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	  	<div class="modal-dialog">
+	  		<form id="fmGoods" enctype="multipart/form-data" class="form-horizontal" action="<{:U('Goods/add')}>" role="form" method="post" onsubmit="return fnSit( this, '#myGoods' )">
+	    		<div class="modal-content">
+		      		<div class="modal-header">
+		        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        		<h4 class="modal-title" id="myModalLabel">添加商品</h4>
+		        		<div class="alert alert-success alert-dismissible text-center" style="opacity: 0;transition: opacity 1s;margin:0;padding: 10px;" role="alert"></div>
+		      		</div>
+	      			<div class="modal-body">
+	      				<input type="hidden" fmName="id" value="id">
+			      		<div class="form-group">
+					    	<label for="inputGoodsName" class="col-sm-2 control-label">商品名</label>
+					    	<div class="col-sm-10">
+					      		<input type="text" fmName="name" class="form-control" id="inputGoodsName" placeholder="商品名">
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="inputGoodsType" class="col-sm-2 control-label">商品类型</label>
+					    	<div class="col-sm-10">
+					      		<select id="inputGoodsType" fmName="type" class="form-control">
+					      			<option selected="selected" value="0">企业</option>
+					      			<option value="1">商城</option>
+							    </select>
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="inputPrices" class="col-sm-2 control-label">市场价</label>
+					    	<div class="col-sm-10">
+					      		<input type="number" fmName="price" class="form-control" id="inputPrices" placeholder="市场价">
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="inputThumb" class="col-sm-2 control-label">缩略图</label>
+					    	<div class="col-sm-10">
+					    		<p class="btn btn-default"><input name="photo" type="file" id="inputThumb" /></p>
+					      		<img style="max-width: 400px;" fmName="thumbnail" id="imgThumb" src="__PUBLIC__/Admin/Images/logo.png" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="inputGoodsStatus" class="col-sm-2 control-label">商品状态</label>
+					    	<div class="col-sm-10">
+					      		<select id="inputGoodsStatus" fmName="status" class="form-control">
+					      			<option selected="selected" value="0">上架</option>
+					      			<option value="1">下架</option>
+							    </select>
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="inputUrl" class="col-sm-2 control-label">商品链接</label>
+					    	<div class="col-sm-10">
+					      		<input type="text" fmName="url" class="form-control" id="inputUrl" placeholder="商品链接">
 					    	</div>
 					  	</div>
 	      			</div>
@@ -350,6 +644,31 @@
 	  	</div>
 	</div>
 	<script type="text/javascript">
+		$(function() { 
+			$('#inputThumb').change(function() { 
+				var formdata = new FormData(); 
+				var v_this = $(this); 
+				var fileObj = v_this.get(0).files; 
+				url = "<{:U('Goods/upload')}>"; 
+				formdata.append("imgFile", fileObj[0]);
+				jQuery.ajax({ 
+					url : url, 
+					type : 'post', 
+					data : formdata,
+					cache : false, 
+					contentType : false, 
+					processData : false, 
+					dataType : "json", 
+					success : function(data) {
+						if( data.status ){
+							$('#imgThumb').attr('src',data.arr.url);
+						} 
+						alert(data.arr.msg);
+					}
+				}); 
+				return false; 
+			});
+		}); 
 		var inputUser = {
 				'name':$('#inputName'),
 				'email':$('#inputEmail'),
@@ -370,6 +689,22 @@
 			'name':$('#inputNamea'),
 			'password':$('#inputPassworda'),
 			'passwords':$('#inputPasswordsa'),
+		};
+		var inputOrder = {
+			'number':$('#inputNumber'),
+			'name':$('#inputUser_id'),
+			'price':$('#inputPrice'),
+			'status':$('#inputStatus1'),
+			'create_time':$('#inputCreate_time'),
+			'pay_type':$('#inputPay_type'),
+		};
+		var inputGoods = {
+			'name' : $('#inputGoodsName'),
+			'type' : $('#inputGoodsType'),
+			'price' : $('#inputPrices'),
+			'thumbnail' : $('#imgThumb'),
+			'url' : $('#inputUrl'),
+			'status' : $('#inputGoodsStatus'),
 		};
 	</script>
 </body>
