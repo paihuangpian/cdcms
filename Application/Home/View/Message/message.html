@@ -1,0 +1,61 @@
+<html>
+<head>
+<include file="Public/header" /><!-- b头部 -->
+<include file="Public/left" /><!-- 左边栏 -->
+<div class="container">
+<include file="nav" /><!-- 头部 -->
+<style> 
+	table th, table td{ padding:0 0; text-indent: 0;text-align:center; }
+</style>
+<table>
+	<tr>
+			<td style="width:100px;">留言者姓名</td>
+			<td style="width:100px;">留言者电话</td>
+			<td style="width:150px;">留言者邮箱</td>
+			<td style="width:100px;">留言者QQ</td>
+			<td>留言页面</td>
+			<td style="width:100px;">留言内容</td>
+			<td style="width:160px;">留言时间</td>
+			<td style="width:50px;">操作</td>
+	</tr>
+	<foreach name="messages" item="v">
+	<tr id="tr{{$v['message_id']}}">
+			<td>{{$v['message_username']}}</td>
+			<td>{{$v['message_tel']}}</td>
+			<td>{{$v['message_email']}}</td>
+			<td>{{$v['message_qq']}}</td>
+			<td>{{$v['message_url']}}</td>
+			<td onmouseenter="mymouseenter({{$v['message_id']}})" onmouseleave="mymouseleave()">显示内容</td>
+			<div style="display:none;" id="div{{$v['message_id']}}">{{$v['message_text']}}</div>
+			<td>{{$v['message_addtime']}}</td>
+			<td><button onclick="mydelete({{$v['message_id']}})">删除</button></td>
+	</tr>
+	</foreach>
+</table>
+<div style="width:400px;height:300px;position:fixed;z-index:999;display:none;left:40%;top:30%;background:#C6C6C6;" id="displays"></div>
+</div>
+</body>
+<script>
+function mydelete(id){
+	if(confirm('你确认要删除吗？')){
+		$.post("{{:U('Message/message_delete')}}",{'id':id},function(res){
+			if(res == 1){
+				$('#tr' + id).remove();
+			}else{
+				alert('删除失败！');
+			}
+		})
+	}
+}
+function mymouseenter(id)
+{
+	$('#displays').css('display','');
+	$('#displays').html($('#div' + id).html());
+}
+
+function mymouseleave()
+{
+	$('#displays').css('display','none');
+}
+</script>
+</html>

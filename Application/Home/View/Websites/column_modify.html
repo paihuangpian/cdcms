@@ -56,10 +56,17 @@ table{
      <tr>
         <td style="width:100px;">栏目状态:</td>
         <td style="text-align:left;">
-          <input name="column_status" type="radio" value="0" checked style="width:20px;" />显示
-          <input name="column_status" type="radio" value="1" style="width:20px;" {{$column['column_status']?'checked':''}} />隐藏
+          <input name="column_status" type="radio" value="0"  style="width:20px;" <if condition="($column['column_status'] == 0)">checked</if> />显示
+          <input name="column_status" type="radio" value="1" style="width:20px;" <if condition="($column['column_status'] == 1)">checked</if> />隐藏
         </td>
 
+    </tr>
+    <tr>
+        <td style="width:100px;">栏目类型:</td>
+        <td style="text-align:left;">
+          <input name="column_type" type="radio" value="products" style="width:20px;" <if condition="($column['column_type'] eq 'products')">checked</if> />产品
+          <input name="column_type" type="radio" value="newss" style="width:20px;" <if condition="($column['column_type'] eq 'newss')">checked</if> />资讯
+        </td>
     </tr>
    <tr style="text-align:center;">
    <td colspan="2"><input type="submit" value="修改" style="width:100px;margin-left:80px;"/></td>

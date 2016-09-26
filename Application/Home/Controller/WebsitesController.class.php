@@ -136,7 +136,7 @@ class WebsitesController extends CommonController
         }else{
             $userid = session('homeuser.id');
             $columns = M('Cms_column');
-            $father = $columns->where("column_userid = {$userid}")->field('column_id,column_name')->select();
+            $father = $columns->where("column_userid = {$userid} and column_pid = 0")->field('column_id,column_name')->select();
             $this->assign('father',$father);
             $this->assign('pid',I('pid'));
             $this->display();
@@ -199,7 +199,6 @@ class WebsitesController extends CommonController
                       <font color='red'></font>".$vo['column_name']."[ID:".$vo['column_id']."]</a>(文档：".$vo[ $vo['column_id'] ].") </td>
                       <td align='right'><a href=".U('http://'.$username.$_SESSION['domain'].'Indexs/product',array('id'=>$vo['column_id']))." target='_blank'>预览</a>|
                       <a href='".U('/Websites/article',array('cid'=>$vo['column_id']))."'>内容</a>|
-                      <a href='".U('/Websites/column_add',array('pid'=>$vo['column_id']))."'>增加子类</a>|
                       <a href='".U('/Websites/column_modify',array('id'=>$vo['column_id']))."''>更改</a>|
                       <a href='javascript:;' onclick='deletes(".$vo['column_id'].")' style='margin-right:50px;'>删除</a>&nbsp;
                         <button id='but".$vo['column_id']."' prompt='".$vo['column_status']."'  onclick='status(".$vo['column_id'].",".$vo['column_status'].");'>
@@ -242,9 +241,9 @@ class WebsitesController extends CommonController
             $id = I('id');//本栏目id
             $columns = M('Cms_column');
             //查询所以栏目 在下拉框遍历
-            $father = $columns->field('column_id,column_name')->select();
+            $father = $columns->where('column_pid = 0 and column_userid ='.session('homeuser.id'))->field('column_id,column_name')->select();
             //查询当前修改的栏目
-            $column = $columns->where("column_id = {$id}")->field('column_id,column_name,column_title,column_keywords,column_description')->find();
+            $column = $columns->where("column_id = {$id}")->field('column_id,column_name,column_title,column_keywords,column_description,column_type,column_status')->find();
             $this->assign('father',$father);
             $this->assign('column',$column);
             $this->display();
@@ -916,6 +915,7 @@ class WebsitesController extends CommonController
     }
         /**************************************友情链接管理结束**************************************/
 
+   
 
     public function _empty()
     {
