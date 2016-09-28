@@ -44,6 +44,7 @@
 <form name="form1" method="post" action="catalog_do.php?dopost=upRankAll"></form>
 <tr>
 <td height="120" bgcolor="#FFFFFF" valign="top" >
+<?php $array = array('资讯'=>'newss','产品'=>'products','封面'=>'cover');?>
 <foreach name="columns" item="vo" >   
     <table border="0" cellpadding="2" cellspacing="0" class="zf_table" width="100%" id="table{{$vo['column_id']}}">
       <tbody>
@@ -60,9 +61,9 @@
       <td align="right"><a href="{{:U('Home/Index/index')}}" target="_blank">预览</a>|
       <a href="{{:U('/Websites/article',array('cid'=>$vo['column_id']))}}">内容</a>|
       <a href="{{:U('/Websites/column_add',array('pid'=>$vo['column_id']))}}">增加子类</a>|
+      <a >【{{$vo['column_type']}}】</a>|
       <a href="{{:U('/Websites/column_modify',array('id'=>$vo['column_id']))}}">更改</a>|
       <a href="javascript:;" onclick="deletes({{$vo['column_id']}})" style="margin-right:50px;">删除</a>&nbsp;
-      <!--  <input name="sortrank26" value="50" style="width:25px;height:20px" type="text"> -->
       <?php $status = array('正常','隐藏');?>
       <button id="but{{$vo['column_id']}}" prompt="{{$vo['column_status']}}" onclick="status({{$vo['column_id']}});"><?php echo $status[ $vo['column_status']];?></button>
 
@@ -70,7 +71,6 @@
       <tr><td colspan="2" id="suns26"></td></tr>
     </tbody></table>
 <div style="margin-left:10px;display:none;" id="loads{{$vo['column_id']}}" judge='1'>
-
 </div>
 </foreach>
 <br>

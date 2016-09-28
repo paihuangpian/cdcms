@@ -24,9 +24,5 @@ class CommonController extends Controller
 		  $this->assign('user_classes',$res);
         
         }
-
-
- // var_dump($_SESSION['prefix']);
-
     }
 }

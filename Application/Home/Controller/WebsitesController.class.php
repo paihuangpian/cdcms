@@ -154,11 +154,14 @@ class WebsitesController extends CommonController
         $userid = session('homeuser.id');
         $columns = M('Cms_column');
         $article = M('Cms_article');
-        $res = $columns->where("column_userid = {$userid} and column_pid = 0")->field('column_id,column_name,column_status')->order('column_path')->select();
+        $res = $columns->where("column_userid = {$userid} and column_pid = 0")->field('column_id,column_name,column_status,column_type')->order('column_path')->select();
 
         foreach($res as $k=>$v){
-
             $res[ $k ][ $v['column_id'] ] = $article->where("article_column = {$v['column_id']}")->count();
+        }
+        $array = array('newss'=>'资讯','products'=>'产品','cover'=>'封面');
+        foreach($res as &$vo){
+            $vo['column_type'] = $array[ $vo['column_type'] ];
         }
 
         $this->assign('columns',$res);
@@ -177,12 +180,13 @@ class WebsitesController extends CommonController
             $username = session('homeuser.name');
             $column2 = M('Cms_column');
             $article = M('Cms_article');
-            $columns = $column2->where("column_userid = {$userid} and column_pid = {$pid}")->field('column_id,column_name,column_status')->order('column_path')->select();
+            $columns = $column2->where("column_userid = {$userid} and column_pid = {$pid}")->field('column_id,column_name,column_status,column_type')->order('column_path')->select();
             foreach($columns as $k=>$v){
 
                 $columns[ $k ][ $v['column_id'] ] = $article->where("article_column = {$v['column_id']}")->count();
 
             }
+            $array = array('newss'=>'资讯','products'=>'产品','cover'=>'封面');
             $status = array('正常','隐藏');
             foreach($columns as $vo){
                 $str .= "
@@ -199,6 +203,7 @@ class WebsitesController extends CommonController
                       <font color='red'></font>".$vo['column_name']."[ID:".$vo['column_id']."]</a>(文档：".$vo[ $vo['column_id'] ].") </td>
                       <td align='right'><a href=".U('http://'.$username.$_SESSION['domain'].'Indexs/product',array('id'=>$vo['column_id']))." target='_blank'>预览</a>|
                       <a href='".U('/Websites/article',array('cid'=>$vo['column_id']))."'>内容</a>|
+                      <a >【". $vo['column_type'] = $array[ $vo['column_type'] ]."】</a>|
                       <a href='".U('/Websites/column_modify',array('id'=>$vo['column_id']))."''>更改</a>|
                       <a href='javascript:;' onclick='deletes(".$vo['column_id'].")' style='margin-right:50px;'>删除</a>&nbsp;
                         <button id='but".$vo['column_id']."' prompt='".$vo['column_status']."'  onclick='status(".$vo['column_id'].",".$vo['column_status'].");'>
@@ -226,7 +231,6 @@ class WebsitesController extends CommonController
             $res = $column->where("column_id = {$pid}")->field('column_path')->find();
             $_POST['column_path'] = $res['column_path'].$_POST['column_pid'].',';
             $_POST['column_time'] = time();
-            
             if($column->save($_POST)){
 
                 $this->redirect('/Websites/column');
@@ -241,14 +245,37 @@ class WebsitesController extends CommonController
             $id = I('id');//本栏目id
             $columns = M('Cms_column');
             //查询所以栏目 在下拉框遍历
-            $father = $columns->where('column_pid = 0 and column_userid ='.session('homeuser.id'))->field('column_id,column_name')->select();
+            $father = $columns->where('column_pid = 0 and column_userid = '.session('homeuser.id'))->field('column_id,column_name')->select();
             //查询当前修改的栏目
-            $column = $columns->where("column_id = {$id}")->field('column_id,column_name,column_title,column_keywords,column_description,column_type,column_status')->find();
+            $column = $columns->where("column_id = {$id} and column_userid = ".session('homeuser.id'))->field('column_id,column_name,column_pid,column_title,column_keywords,column_description,column_type,column_status,column_text')->find();
             $this->assign('father',$father);
             $this->assign('column',$column);
             $this->display();
         }
     }
+
+
+    // /**
+    //  * 更改栏目类型
+    //  */
+    // public function column_type()
+    // {
+    //     $id = I('id');
+    //     $type = I('type');
+    //     if(!$id || !is_numeric($id) || !$type){ echo "<script>alert('非法操作！');window.history.go(-1);</script>";}
+    //     $column = M('Cms_column');
+    //     $columns = $column->where('column_pid ='.$id.' and column_userid = '.session('homeuser.id'))->getField('column_id',true);
+    //     $columns[] = $id;
+    //     if($type == 'newss'){
+    //         $data['column_type'] = 'products';
+    //     }else{
+    //         $data['column_type'] = 'newss';
+    //     }
+    //     foreach($columns as $v){
+    //         $res = $column->where("column_id = {$v} and column_userid = ".session('homeuser.id'))->save($data);
+    //     }
+    //     $this->redirect('Websites/column');
+    // }
 
 
     /**

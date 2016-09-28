@@ -8,7 +8,7 @@
   <include file="nav" /><!-- 头部 -->
 <style type="text/css">
 input{
-  width:380px;
+  width:90%;
 }
 
 table{
@@ -16,13 +16,18 @@ table{
 }
 
 </style> 
-<div style="margin-top:15%;margin-left:30%;width:520px;margin:0 auto;">
+<!-- 百度编辑器 -->
+ <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/lang/zh-cn/zh-cn.js"></script>
+<!-- 百度编辑器 -->
+<div style="margin-top:15%;margin-left:30%;width:100%;margin:0 auto;">
     <form method="post" action="{{:U('Websites/column_add')}}">
     <table>
      <tr>
         <td style="width:100px;">父级栏目:</td>
         <td>
-          <select name="column_pid" style="width:386px;">
+          <select name="column_pid" style="width:90.5%;">
             <option value="0">增加顶级栏目</option>
             <foreach name="father" item="vo">
               <option value="{{$vo['column_id']}}" 
@@ -51,7 +56,7 @@ table{
     </tr>
     <tr>
         <td style="width:100px;">栏目描述:</td>
-        <td><textarea name="column_description" style="width:380px;height:100px;"></textarea></td>
+        <td><textarea name="column_description" style="width:90%;height:100px;"></textarea></td>
     </tr>
     <tr>
         <td style="width:100px;">栏目状态:</td>
@@ -65,9 +70,16 @@ table{
         <td style="text-align:left;">
           <input name="column_type" type="radio" value="products" checked style="width:20px;" />产品
           <input name="column_type" type="radio" value="newss" style="width:20px;" />资讯
+          <input id="editors" name="column_type" type="radio" value="cover" style="width:20px;" />封面
         </td>
     </tr>
-   <tr style="text-align:center;">
+    <tr style="display:none;" id="treditors">
+        <td style="width:100px;">栏目内容:</td>
+        <td style="text-align:left;">
+         <script id="editor" type="text/plain" style="width:100%;height:500px;" name="column_text">{{$column['column_text']}}</script>
+        </td>
+    </tr>
+   <tr style="text-align:center;" >
    <td colspan="2"><input type="submit" name="" value="添加" style="width:100px;margin-left:80px;"/></td>
    </tr>
     </table>
@@ -75,4 +87,17 @@ table{
 </div>
 </div>
 </body>
+<script>
+var ue = UE.getEditor('editor');//创建百度编辑器
+  $(":radio").click(function(){
+    if($("#editors:radio").attr('checked')){
+      $('#treditors').css('display','');
+    }else{
+
+      $('#treditors').css('display','none');
+    }
+  });
+
+
+</script>
 </html>
