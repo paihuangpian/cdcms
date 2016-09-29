@@ -5,7 +5,259 @@
 	<include file="Public/header" /><!-- 头部 -->
 	<include file="Public/left" /><!-- 左边栏 -->
 	<div class="container">
-		<div class="content-tab web" id="index"  {{$user_classes?'':'style="display:none"'}} >
+
+
+    <style>
+    /*body{
+  background-color:#ededf0; 
+}*/
+html{text-overflow:ellipsis;} /*解决IE6下图片抖动*/ 
+div,form,img,ul,ol,li,dl,dt,dd,map {padding:0;margin:0;border:0;}
+h1,h2,h3,h4,h5,h6 {margin:0; padding:0; }
+body{margin:0px; padding:0px; font-size:14px; color:#666; font-family:"微软雅黑","宋体",Arial, Helvetica, sans-serif; background:#fff; min-width:1200px;}
+img{ border:none;}
+ul,li{ list-style:none;}
+.clearfix:after{
+  display: block;
+  clear: both;
+  height: 0;
+  content: '';
+  visibility: hidden;
+}
+div{
+  display: block;
+}
+
+a{ color:#666; text-decoration:none;cursor: pointer;}
+/*header*/
+    *{
+      padding: 0;
+      margin: 0;
+    }
+   
+
+.Top_t_1{
+  background:url(images/back.png)no-repeat right center;
+  width:60px;
+    padding: 0px 11px;
+    display: block;
+
+}
+
+.bus_pla{
+  position: relative;
+  line-height: 48px;
+  font-size: 14px;
+  margin-left: 15px;
+    display: block;
+    height: 49px;
+    width: 109px;
+    color: #ffffff;
+    margin:0 auto;
+    overflow: hidden; 
+    background:url(../images/baise.png)no-repeat right center;
+}
+.ser_s{
+  width:181px;
+  height:240px;
+    margin-top: 96px;
+
+}
+.ser_s>li{
+background-color:#3598dc;
+height: 48px;
+width: 181px;
+
+}
+.ser_s li>a{
+    font-size: 15px;
+    color:#ffffff;
+    line-height:40px;
+    height: 40px;
+    width:75px;
+    float: left;
+   margin-left:61px;
+}
+
+.Group_tab1{
+  width:970px;
+  height:728px;
+  
+  margin-top:26px;
+  margin-left: 16px;   
+}
+
+
+.ser_s{
+  width:181px;
+  height:240px;
+    margin-top: 96px;
+
+}
+.ser_s>li{
+background-color:#3598dc;
+height: 48px;
+width: 181px;
+
+}
+.ser_s li>a{
+    font-size: 15px;
+    color:#ffffff;
+    line-height:40px;
+    height: 40px;
+    width:75px;
+    float: left;
+   margin-left:61px;
+}
+.Group_btn_line{
+  width:506px;
+    margin-top:-1px; 
+  background-color:#e5e5e5;
+  height: 1px;
+  float:right;   
+}
+
+body{
+  background-color:#ededf0; 
+}
+
+.Group_box{
+  float: left;
+    width: 100%;
+  height: auto;
+  
+  overflow: hidden;
+  background-color: white;
+}
+
+
+#Group_item{
+    width:970px;
+    height:40px;
+    margin-top:26px;
+    margin-left: 21px; 
+     }
+
+     #Group_item>div{
+      width:92px;
+  height: 40px;
+  text-align: center;
+  color: #5c5c5c;
+  line-height: 40px;
+  float: left;
+  border-left:1px solid #e5e5e5;
+  border-bottom:1px solid #e5e5e5;
+  border-top:1px solid #e5e5e5;
+cursor: pointer;
+     }
+     #Group_item>div:nth-child(5){
+         border-right: 1px solid #e5e5e5;
+     }
+#Group_item>.active{
+  border-top:2px solid #3598dc;
+  border-bottom: none;
+}
+     #Group_main{
+    margin-left: -36px;
+    height: 500px;
+    width: 100%;
+    margin-top: 35px;
+          
+     }
+     #Group_main>.active{
+      display: block;
+     }
+     #Group_main>div{
+      display: none;
+     }
+    
+    #Group_main>div>ul{
+      width:28%;
+      height:238px;
+       
+      float: left;
+      margin-left: 5%;
+      margin-bottom: 5%;  
+     }
+     #Group_main>div>ul>li>{
+      width: 100%;
+      height:238px;
+     
+     }
+     #Group_main>div>ul>li>img{
+      width: 100%;
+      height: 238px;
+
+     }
+     .btn1,.btn2{
+      height: 30px;
+      width: 60px;
+      border-radius: 50px / 50px;
+      color: #ffffff;
+      background-color:#3598dc;
+      line-height: 30px;
+      font-size:12px;
+      display: inline-block;
+      text-align: center;
+     margin:0px 30px; 
+     }
+     .btn2{
+      float: right;
+     }
+     .btn2:hover{color:#f00;}
+     .btn1:hover{color:#f00;}
+  </style>  	
+  <div class="Group_box">
+    <div id="Group_item">
+      <div class="active">服装</div>
+      <div>饰品</div>
+      <div>鞋帽箱包</div>
+      <div>户外用品</div>
+      <div>美容护肤</div>
+     <span class="Group_btn_line"></span>
+    </div>
+    <div id="Group_main">
+    <php>$array = array(1,2,3,4,5);</php>
+
+    <foreach name="array" item='vo' key="k">
+    <if condition="$k eq  0"><div class="active">
+    <else /> <div>
+    </if>
+      	<foreach name="templates" item="v">
+         <ul>
+          <li>
+           <img src="{{$v['thumb']}}" />
+           <a class="btn1" style="float:left;" href="{{:U('Indexs/tpl_choose',array('id'=>$v['id']))}}">应用</a>
+           <a class="btn2" target="_blank" href="http://{{$v['url']}}">查看</a>
+          </li>
+      </ul>
+      	</foreach>
+      </div>
+    </foreach>
+    </div>
+    </div>
+          <script type="text/javascript">
+         var oGitem=document.getElementById('Group_item').getElementsByTagName('div');
+         var oGmain=document.getElementById('Group_main').getElementsByTagName('div');
+       for (var i = 0; i < oGitem.length; i++) {
+        oGitem[i].index=i;
+
+         console.log(oGitem[i].index);
+        oGitem[i].onclick=function(){
+          
+          for (var i = 0; i < oGmain.length; i++) {
+            oGmain[i].style.display='none';
+            oGitem[i].style.borderTop='1px solid #e5e5e5';
+            oGitem[i].style.borderBottom='1px solid #e5e5e5';
+          }
+           oGmain[this.index].style.display='block';
+           oGitem[this.index].style.borderTop='2px solid #3598dc';
+           oGitem[this.index].style.borderBottom='none';
+        }
+       }
+    </script>
+
+		<!-- <div class="content-tab web" id="index"  {{$user_classes?'':'style="display:none"'}} >
 			首页广告
 		</div>
 		<div class="content-tab web" style="display:none"   id="web">
@@ -70,7 +322,7 @@
 				<img src="__PUBLIC__/Home/images/scstyle.png" alt="">
 				</a>
 			</p>
-		</div>
+		</div> -->
 	</div>
 	<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 	<script>

@@ -4,6 +4,7 @@
 <include file="Public/header" /><!-- b头部 -->
 <include file="Public/left" /><!-- 左边栏 -->
 <div class="container">
+<style> #mynav #nav_a3{background:#006A98;}</style>
 <include file="nav" /><!-- 头部 -->
 <!--  快速转换位置按钮  -->
 <style>
@@ -42,7 +43,7 @@
 		<td>{{$v['article_status']}}</td>
 		<td>{{$v['article_publisher']}}</td>
 		<td><a href="{{:U('Websites/article_add',array('id'=>$v['article_id']))}}">编辑</a> |
-		<a href="{{$domainurl}}/Indexs/product?aid={{$v['article_id']}}" target="_blank">预览</a> | 
+		<!-- <a href="{{$domainurl}}/Indexs/product?aid={{$v['article_id']}}" target="_blank">预览</a> |  -->
 		<a href="javascript:;" onclick="deletes({{$v['article_id']}})">删除</a>
 		</td>
 	</tr>

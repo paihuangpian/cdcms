@@ -26,6 +26,7 @@
       }
 
   </style>
+  <style> #mynav #nav_a2{background:#006A98;}</style>
   <include file="Public/left" /><!-- 左边栏 -->
   <div class="container">
   <include file="nav" /><!-- 头部 -->
@@ -58,7 +59,7 @@
       <a href="{{:U('/Websites/article',array('cid'=>$vo['column_id']))}}">
       <font color="red"></font>{{$vo['column_name']}}[ID:{{$vo['column_id']}}]</a>(文档：{{$vo[ $vo['column_id'] ]}})  
       </td>
-      <td align="right"><a href="{{:U('Home/Index/index')}}" target="_blank">预览</a>|
+      <td align="right"><a href="http://{{:session('homeuser.name')}}.{{$domain}}/indexs/{{$array [ $vo['column_type'] ]}}?id={{$vo['column_id']}}" target="_blank">预览</a>|
       <a href="{{:U('/Websites/article',array('cid'=>$vo['column_id']))}}">内容</a>|
       <a href="{{:U('/Websites/column_add',array('pid'=>$vo['column_id']))}}">增加子类</a>|
       <a >【{{$vo['column_type']}}】</a>|

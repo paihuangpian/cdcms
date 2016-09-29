@@ -7,6 +7,7 @@ class WebsitesController extends CommonController
     public function index()
     {
 
+
     	$this->display('websites');
     }
 
@@ -164,6 +165,7 @@ class WebsitesController extends CommonController
             $vo['column_type'] = $array[ $vo['column_type'] ];
         }
 
+        $this->assign('domain',session('domain'));
         $this->assign('columns',$res);
 
         $this->display();
@@ -201,7 +203,7 @@ class WebsitesController extends CommonController
                       <input class='np' name='tids[]' value='26' type='checkbox'>
                       <a href='".U('/Websites/article',array('cid'=>$vo['column_id']))."'>
                       <font color='red'></font>".$vo['column_name']."[ID:".$vo['column_id']."]</a>(文档：".$vo[ $vo['column_id'] ].") </td>
-                      <td align='right'><a href=".U('http://'.$username.$_SESSION['domain'].'Indexs/product',array('id'=>$vo['column_id']))." target='_blank'>预览</a>|
+                      <td align='right'><a href='http://".session('homeuser.name').".".session('domain')."/indexs/".$vo['column_type']."?id=".$vo['column_id']."' target='_blank'>预览</a>|
                       <a href='".U('/Websites/article',array('cid'=>$vo['column_id']))."'>内容</a>|
                       <a >【". $vo['column_type'] = $array[ $vo['column_type'] ]."】</a>|
                       <a href='".U('/Websites/column_modify',array('id'=>$vo['column_id']))."''>更改</a>|

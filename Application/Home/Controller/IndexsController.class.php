@@ -5,11 +5,12 @@ class IndexsController extends CommonController
 {
     public function index()
     {
-
-    	
+        $templates = M('Templates');
+        $templatess = $templates->where('id > 1')->select();
+        $this->assign('templates',$templatess);
+        // dump($templatess);exit;
     	$this->display(); 
     }
-
 
 
      /**
@@ -26,11 +27,14 @@ class IndexsController extends CommonController
             //查询当前用户 已拥有的模板是否是当前模板
             if($user_tpl->where("user_id = {$userid} and tpl_id = {$tplid['tpl_id']}")->find()){
                 echo "<script>alert('次模板您已经安装！');window.history.go(-1);</script>";
+                exit;
             }
             //更新模板
             $tplres = $user_tpl->where("user_id = {$userid}")->save($tplid);
             if($tplres){
-               echo "<script>alert('模板安装成功，你可以访问".session('homeuser.name').".cms.com 进行查看。');window.history.go(-1);</script>"; 
+               // echo "<script>alert('模板安装成功，你可以访问".session('homeuser.name').".cms.com 进行查看。');window.history.go(-1);</script>"; 
+                echo "<script>alert('安装成功！');</script>";
+                $this->redirect('Websites/config');
             }else{
 
                 echo "<script>alert('抱歉！模板安装失败！请重新安装！');window.history.go(-1);</script>";
