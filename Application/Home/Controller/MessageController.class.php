@@ -28,12 +28,24 @@ class MessageController extends Controller
                 exit;
              }
             if(!$_POST['name']){ echo "<script>alert('未知错误！');window.history.go(-1);</script>";exit;}
+            $user = M('Users');
             C('DB_PREFIX','cms_');
             $message = D('Message');
             $data = $message->message_data($_POST);
             $res = $message->add($data);
             if($res){
-                echo "<script>alert('提交成功');window.history.go(-1);</script>";
+                $useremail = $user->where("id = {$data['message_userid']}")->field('email')->find();
+                //向用户发送邮件
+                 $time = date('Y-m-d H:i:s',$data['message_addtime']);
+                 $body = "留言者姓名:{$data['message_username']}<br>
+                          留言者电话:{$data['message_tel']}<br>
+                          留言者邮箱:{$data['message_email']}<br>
+                          留言者Q  Q:{$data['message_qq']}<br>
+                          留言内容:{$data['message_text']}<br>
+                          留言页面:{$data['message_url']}<br>
+                          留言时间:{$time}<br> ";
+                $email_res = sendMail($useremail['email'],'云狄建站提醒您，您有新的留言。',$body);
+                echo "<script>alert('留言成功，我们会尽快与您联系。');window.history.go(-1);</script>";
             }else{
                  echo "<script>alert('提交失败！');window.history.go(-1);</script>";
             }

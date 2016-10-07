@@ -19,9 +19,9 @@ class CommonController extends Controller
 		//查询用户是否已选择模板
     	$user_classes = M('User_tpl');
     	$userid = session('homeuser.id');
-    	$res = $user_classes->where("user_id = $userid")->find();
+    	$res = $user_classes->where("user_id = {$userid}")->find();
         if($res['tpl_id'] != 1){
-		  $this->assign('user_classes',$res);
+		$this->assign('user_classes',$res);
         
         }
     }

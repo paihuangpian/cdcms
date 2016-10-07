@@ -30,7 +30,17 @@ class LoginController extends Controller
             if($user['password'] == $pass){
                 $user['time'] = date('Y-m-d H:i:s',time());//登录时的时间 退出登录时 写入上次登录时间用
                 session('homeuser',$user);
-                $this->redirect('/Index/index');
+
+                //查询用户是否已选择模板  如果没有选择继续跳转到选择模板的界面
+                $user_classes = M('User_tpl');
+                $userid = session('homeuser.id');
+                $res = $user_classes->where("user_id = {$userid}")->find();
+                if($res['tpl_id'] != 1){
+                    $this->redirect('Websites/index');
+                }else{
+                    $this->redirect('/Index/index');
+                }
+
             }else{
 
                 $this->redirect('/Login/login',array('error'=>'用户名或密码错误'));
@@ -48,8 +58,10 @@ class LoginController extends Controller
     {
         $users = M('Users');
         $id = session('homeuser.id');
-        $time['update_at'] = session('homeuser.time')?session('homeuser.time'):date('Y-m-d H:i:s',time());
-        $users->where("id = $id")->save($time);
+        if($id){
+            $time['update_at'] = session('homeuser.time')?session('homeuser.time'):date('Y-m-d H:i:s',time());
+            $users->where("id = $id")->save($time);
+        }
         session('homeuser',null);
         $this->redirect('/Login/login');
     }
@@ -97,11 +109,9 @@ class LoginController extends Controller
 
                 $this->redirect('/Login/registered',array('error'=>'注册失败！'));
              }
-
     	}else{
 
     		   $this->display('register');
-    		
     	}
     }
 
