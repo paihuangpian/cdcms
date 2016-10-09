@@ -24,12 +24,14 @@ class LoginController extends Controller
             //验证用户
             $name = htmlspecialchars(I('user_name')) ;
             //查询用户
-            $user = $users->where("name = '{$name}' or  email = '{$name}'")->field('id,name,email,status,password,password_rand')->find();
+            $user = $users->where("name = '{$name}' or  email = '{$name}'")->field('id,name,email,status,password,password_rand,temporary')->find();
             if($user['status'] != 0)$this->redirect('/Login/login',array('error'=>'你的账户已被禁用！'));
             $pass = md5(I('user_password').$user['password_rand']);//post过来的密码拼接注册时存储的随机字符串
             if($user['password'] == $pass){
-                $user['time'] = date('Y-m-d H:i:s',time());//登录时的时间 退出登录时 写入上次登录时间用
                 session('homeuser',$user);
+                $data['update_at'] = $user['temporary'];
+                $data['temporary'] = date('Y-m-d H:i:s',time());
+                $users->where("id = {$user['id']}")->save($data);//更新最后上次登录时间 //写入当前登录时间 
 
                 //查询用户是否已选择模板  如果没有选择继续跳转到选择模板的界面
                 $user_classes = M('User_tpl');
@@ -56,12 +58,6 @@ class LoginController extends Controller
      */
     public function logout()
     {
-        $users = M('Users');
-        $id = session('homeuser.id');
-        if($id){
-            $time['update_at'] = session('homeuser.time')?session('homeuser.time'):date('Y-m-d H:i:s',time());
-            $users->where("id = $id")->save($time);
-        }
         session('homeuser',null);
         $this->redirect('/Login/login');
     }
@@ -97,7 +93,7 @@ class LoginController extends Controller
              $data = $user->data_s($_POST);//创建数据
              $res = $user->add($data);
              if($res){
-                $users = $user->where("id = {$res}")->field('id,name,email,status,password,password_rand')->find();
+                $users = $user->where("id = {$res}")->field('id,name,email,status,password,password_rand,temporary')->find();
                 session('homeuser',$users);
 
                 $user_tpl = M('User_tpl');

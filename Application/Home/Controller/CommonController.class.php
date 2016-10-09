@@ -6,6 +6,11 @@ class CommonController extends Controller
     public function _initialize()
     {
 
+        
+        // 主域名
+        $domain = explode('.',$_SERVER['HTTP_HOST']);
+        $_SESSION['domain']  =  $domain['1'].'.'.$domain['2'];
+
     	if(!session('homeuser'))$this->redirect('/Login/login');
 
     	$h = date('G');

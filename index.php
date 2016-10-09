@@ -16,9 +16,6 @@ $arr    =    explode('/',$_SERVER['PHP_SELF']);
     define('BIND_MODULE','Home');
  }
 
-// 主域名
-$domain = explode('.',$_SERVER['HTTP_HOST']);
-$_SESSION['domain']  =  $domain['1'].'.'.$domain['2'];
 
 
 
