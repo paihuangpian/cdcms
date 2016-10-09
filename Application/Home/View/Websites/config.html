@@ -17,7 +17,7 @@
       <div id="">
       <table style=""  bgcolor="#cfcfcf" border="0" cellpadding="1" cellspacing="1" width="100%" >
       <tbody>
-      <tr height="25" align="center" bgcolor="#FBFCE2">
+      <tr height="25" align="center" bgcolor="">
        <td width="300" style="text-align:center;">参数说明</td>
        <td>参数值</td>
       </tr>
@@ -28,7 +28,7 @@
             width:150px;
           }
       </style>
-      <tr height="25" align="center" bgcolor="#F9FCEF">
+      <tr height="25" align="center" >
        <td width="300" >公司名称： </td>
        <td style="padding:3px;" align="left">
        <input name="config_name"  value="{{$configs['config_name']}}" style="width:80%" type="text"></td>
@@ -38,12 +38,12 @@
        <td style="padding:3px;" align="left">
        <input name="config_home"  value="{{$configs['config_home']}}" style="width:80%" type="text"></td>
       </tr>
-        <tr height="25" align="center" bgcolor="#F9FCEF">
+        <tr height="25" align="center" >
        <td width="300">网站主标题： </td>
        <td style="padding:3px;" align="left">
        <input name="config_title"  value="{{$configs['config_title']}}" style="width:80%" type="text"></td>
       </tr>
-      <tr height="25" align="center" bgcolor="#F9FCEF">
+      <tr height="25" align="center" >
        <td width="300">站点默认关键字： </td>
        <td style="padding:3px;" align="left">
        <input name="config_keywords"  value="{{$configs['config_keywords']}}" style="width:80%" type="text"></td>
@@ -64,10 +64,15 @@
        <td style="padding:3px;" align="left">
        <input name="config_phone" value="{{$configs['config_phone']}}" style="width:80%" type="text"></td>
       </tr>
-      <tr height="25" align="center" bgcolor="#F9FCEF">
+      <tr height="25" align="center" >
        <td width="300">电话： </td>
        <td style="padding:3px;" align="left">
        <input name="config_tel"  value="{{$configs['config_tel']}}" style="width:80%" type="text"></td>
+      </tr>
+      <tr height="25" align="center" >
+       <td width="300">传真： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_chuanzhen"  value="{{$configs['config_chuanzhen']}}" style="width:80%" type="text"></td>
       </tr>
       <tr height="25" align="center" bgcolor="#ffffff">
        <td width="300">E-mail： </td>
@@ -75,23 +80,28 @@
        <input name="config_email"  value="{{$configs['config_email']}}" style="width:80%" type="text"></td>
       </tr>
       <tr height="25" align="center" bgcolor="#ffffff">
-       <td width="300">在线客服： </td>
+       <td width="300">Q Q客服： </td>
        <td style="padding:3px;" align="left">
        <input name="config_customer"  value="{{$configs['config_customer']}}" style="width:80%" type="text"></td>
       </tr>
+      <tr height="25" align="center" bgcolor="#ffffff">
+       <td width="300">微博： </td>
+       <td style="padding:3px;" align="left">
+       <input name="config_weibo"  value="{{$configs['config_weibo']}}" style="width:80%" type="text"></td>
+      </tr>
       
-      <tr height="25" align="center" bgcolor="#F9FCEF">
+      <tr height="25" align="center" >
        <td width="300">地址： </td>
        <td style="padding:3px;" align="left">
        <input name="config_address"  value="{{$configs['config_address']}}" style="width:80%" type="text"></td>
       </tr>
 
-      <tr height="25" align="center" bgcolor="#F9FCEF">
+      <tr height="25" align="center" >
        <td width="300">网站版权信息： </td>
        <td style="padding:3px;" align="left">
        <input name="config_copyright"  value="{{$configs['config_copyright']}}" style="width:80%" type="text"></td>
       </tr>
-      <tr height="25" align="center" bgcolor="#F9FCEF">
+      <tr height="25" align="center" >
        <td width="300">备案信息： </td>
        <td style="padding:3px;" align="left">
        <input name="config_record" value="{{$configs['config_record']}}" style="width:80%" type="text"></td>
@@ -147,7 +157,7 @@
       </table>
      </div>
      <table style="border:1px solid #cfcfcf;border-top:none;" border="0" cellpadding="1" cellspacing="1" width="100%">
-      <tbody><tr bgcolor="#F9FCEF">
+      <tbody><tr >
        <td colspan="3" height="50">
        <table border="0" cellpadding="1" cellspacing="1" width="98%">
          <tbody><tr>
