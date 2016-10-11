@@ -1,0 +1,127 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>增加轮播图</title>
+<style> #mynav #nav_a7{background:#006A98;}</style>
+<include file="Public/header" /><!-- b头部 -->
+<include file="Public/left" /><!-- 左边栏 -->
+<div class="container">
+<include file="nav" /><!-- 头部 -->
+<body onpageshow='event.persisted &amp;&amp; (function(){var allInstances = CKEDITOR.instances, editor, doc;for ( var i in allInstances ){	editor = allInstances[ i ];	doc = editor.document;	if ( doc )	{		doc.$.designMode = "off";		doc.$.designMode = "on";	}}})();' topmargin="8">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+    <tbody><tr>
+      <td height="30" width="60%" style="text-align:left;">
+      <a href="{{:U('Websites/posters')}}"><u>轮播图列表</u></a> &gt;&gt; 添加轮播图</td>
+    </tr>
+  </tbody>
+  </table>
+  <style>
+       table{ width: 100%; text-align: none; }
+       table th, table td{padding:0 0; text-indent: 0;}
+       tr{height:40px;}
+       td{height:30px;}
+       tr:first-child td:first-child{ text-align:right;}
+</style>
+<form name="form1" action="{{:U('Websites/add_posters')}}?id={{$posters['posters_id']}}" enctype="multipart/form-data" method="post" onsubmit="return checkSubmit()">
+  <table id="needset" style="border:1px solid #cfcfcf;background:#ffffff;" align="center" border="0" cellpadding="2" cellspacing="2" width="98%">
+    <tbody>
+    <tr>
+      <td colspan="5" class="bline" height="24">
+      	<table border="0" cellpadding="0" cellspacing="0" width="800">
+          <tbody><tr>
+            <td width="63">&nbsp;轮播图名称：</td>
+            <td width="408"><input name="name" id="title" style="width:588px" value="{{$posters['posters_name']}}" type="text" /></td>
+          </tr>
+        </tbody></table></td>
+    </tr>
+     <tr>
+      <td colspan="5" class="bline" height="24">
+        <table border="0" cellpadding="0" cellspacing="0" width="800">
+          <tbody><tr>
+            <td width="63">&nbsp;连接地址：</td>
+            <td width="408"><input name="url" style="width:588px" value="{{$posters['posters_url']}}" type="text" /></td>
+          </tr>
+        </tbody></table></td>
+    </tr>
+     <tr>
+      <td colspan="5" class="bline" height="24">
+        <table border="0" cellpadding="0" cellspacing="0" width="800">
+          <tbody><tr>
+            <td width="63">&nbsp;投放到哪个页面：</td>
+            <td width="408">
+               <select name="type" id="" onchange="mychange(this)">
+                   <option value="">请选择页面</option>
+                   <option value="index" <if condition="($posters['posters_type'] eq 'index')">selected </if>  >首页</option>
+                   <option value="product" <if condition="($posters['posters_type'] eq 'product')">selected </if> >产品列表页</option>
+                   <option value="news" <if condition="($posters['posters_type'] eq 'news')">selected </if> >资讯列表页</option>
+                   <option value="cover" <if condition="($posters['posters_type'] eq 'cover')">selected </if> >封面页</option>
+                   <option value="product_show" <if condition="($posters['posters_type'] eq 'product_show')">selected </if> >产品文章页</option>
+                   <option value="news_show" <if condition="($posters['posters_type'] eq 'news_show')">selected </if> >资讯文章页</option>
+               </select>
+            </td>
+          </tr>
+        </tbody></table></td>
+    </tr>
+     <tr>
+      <td colspan="5" class="bline" height="24">
+        <table border="0" cellpadding="0" cellspacing="0" width="800">
+        <tbody>
+        <tr>
+          <td width="110">&nbsp;状态：</td>
+          <td>
+       <span id="typeidct">
+       <input name="status" type="radio" value="0" checked />显示
+       <input name="status" type="radio" value="1" {{$posters['posters_status']?'checked':''}} />隐藏
+      </span>
+       </td>
+        </tr>
+      </tbody></table></td>
+    </tr>
+  <tr>
+     <td colspan="2"><table style="margin-bottom:3px;" border="0" cellpadding="0" cellspacing="0" width="100%">
+       <tbody><tr> 
+        <td class="bline" height="24" width="110">&nbsp;图片：</td>
+        <td class="bline">
+        <input name="pic" id="suoluetu1" style="width:300px" class="text" type="file"  onchange="check(this)"> 
+    </td>
+       </tr>
+    </tbody></table>
+</td>
+   </tr>
+    <tr>
+    <td>
+    <span style="margin-left:110px;color:#f00;">{{$Think.get.error|default=''}}</span>
+      <input type="submit" value="提交">
+    </td>
+    </tr>
+  </tbody>
+  </table>
+</form>
+<div style="width:98%;text-align:center;" id="div_pic">
+     <img src="{{$posters['posters_pic']}}" style="max-width:98%" id="imgs">
+</div>
+</div>
+</body>
+<script type="text/javascript">
+    //获取临时图片
+    var img = document.getElementById('imgs');
+    function check(obj){
+        $('#div_pic').css('display','');
+        console.dir(obj.files);
+        img.src = window.URL.createObjectURL(obj.files[0]);
+    }
+
+
+ function mychange(obj){
+    $.post("{{:U('Websites/posters_only')}}",{'type':$(obj).val()},function(res){
+
+      if(res){
+        alert(res);
+      }
+    })
+ }
+
+
+</script>
+</html>

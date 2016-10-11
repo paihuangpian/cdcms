@@ -941,8 +941,140 @@ class WebsitesController extends CommonController
         
     }
         /**************************************友情链接管理结束**************************************/
+    /**
+     * 图片管理
+     */
+    public function posters()
+    {
+        $posters = M('Cms_posters');
+        $res = $posters->where('posters_userid = '.session('homeuser.id'))->select();
+        $this->assign('posters',$res);
+        $this->display();
+    }
 
-   
+
+    public function add_posters()
+    {
+        C('DB_PREFIX','cms_');
+        if(IS_POST){
+            $posters = D('posters');
+            $id = I('get.id');
+            //验证令牌
+             if(!$posters->autoCheckToken($_POST)){
+                echo "<script>alert('令牌错误！');window.history.go(-1);</script>";exit;
+             }
+             if(!$_POST['type']){echo "<script>alert('请选择页面！');window.history.go(-1);</script>";exit;}
+             if(!$id){
+                if($_FILES['pic']['error'] == 4){
+                    echo "<script>alert('请选择图片！');window.history.go(-1);</script>";exit;
+                }
+             }
+            $data = $posters->posters_data($_POST);
+
+            if($_FILES['pic']['error'] != 4){
+                if($id){
+                    $pic = $posters->where('posters_id ='.$id.' and posters_userid ='.session('homeuser.id'))->field('posters_pic')->find();
+                    S(session('homeuser.name').'posters_pic',$pic['posters_pic']);
+                }
+                $username = session('homeuser.name');
+                if(!file_exists('./Customer_Uploads/'.$username)){
+                    mkdir('./Customer_Uploads/'.$username,0777);
+                    chmod('./Customer_Uploads/'.$username,0777);
+                }
+                //上传缩略图
+                $upload = new \Think\Upload();// 实例化上传类    
+                $upload->maxSize   =     3145728 ;// 设置附件上传大小    
+                $upload->rootPath  =     './Customer_Uploads/';   
+                $upload->savePath  =      "{$username}/"; // 设置附件上传目录    // 上传文件     
+                $info   =   $upload->upload(); 
+                if($info){
+                    if($info['pic']){
+
+                        $data['posters_pic'] = '/Customer_Uploads/'.$info['pic']['savepath'].$info['pic']['savename'];
+                    }
+                }else{
+                    $this->error($upload->getError()); 
+                }
+            }
+            if($id){
+                $res = $posters->where("posters_id = {$id} and posters_userid = ".session('homeuser.id'))->save($data);
+                $x = '修改';
+            }else{
+                $res = $posters->add($data);
+                $x = '添加';
+            }
+             if(S(session('homeuser.name').'posters_pic') && $data['posters_pic']){
+                @unlink('.'.S(session('homeuser.name').'posters_pic'));
+            }
+            S(session('homeuser.name').'posters_pic',null);  
+
+            if($res){
+                echo "<script>alert('".$x."成功');window.location.href='".U('posters')."'</script>";
+            }else{
+              if($id){
+                 $this->redirect('add_posters',array('id'=>$id));
+
+              }else{
+
+                 $this->redirect('add_posters');
+              }
+            }
+
+        }else{
+
+            $posters = M('posters');
+            $id = I('get.id');
+            if($id){
+            $res = $posters->where("posters_id = {$id} and posters_userid = ".session('homeuser.id'))->find();
+            $this->assign('posters',$res);
+                
+            }
+
+            $this->display();
+        }
+    }
+
+    public function posters_delete()
+    {
+        if(IS_AJAX){
+            $id = I('id');
+            $posters = M('Cms_posters');
+           if($id){
+                    $pic = $posters->where('posters_id ='.$id.' and posters_userid ='.session('homeuser.id'))->field('posters_pic')->find();
+                    S(session('homeuser.name').'posters_pic',$pic['posters_pic']);
+                    $res = $posters->where("posters_id = {$id} and posters_userid = ".session('homeuser.id'))->delete();
+
+                }
+            if(S(session('homeuser.name').'posters_pic') && $res){
+                @unlink('.'.S(session('homeuser.name').'posters_pic'));
+            }
+            S(session('homeuser.name').'posters_pic',null);  
+            if($res){
+                $this->ajaxReturn(1);
+            }else{
+                $this->ajaxReturn('删除失败！');
+            }
+
+            
+        }
+    }
+
+
+    public function posters_only()
+    {
+        if(IS_AJAX){
+            $type = I('type');
+            if($type){
+                $posters = M('Cms_posters');
+                $res = $posters->where("posters_type = '{$type}' and posters_userid = ".session('homeuser.id'))->find();
+                if($res){
+                    $this->ajaxReturn('每个页面只能显示一张baauer图！添加多张将会被覆盖！');
+                }
+            }
+        }
+    }
+
+
 
     public function _empty()
     {

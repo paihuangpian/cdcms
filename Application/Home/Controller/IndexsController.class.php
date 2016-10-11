@@ -6,7 +6,7 @@ class IndexsController extends CommonController
     public function index()
     {
         $templates = M('Templates');
-        $templatess = $templates->where('id > 1')->select();
+        $templatess = $templates->select();
         $this->assign('templates',$templatess);
         // dump($templatess);exit;
     	$this->display(); 

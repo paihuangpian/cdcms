@@ -226,7 +226,7 @@ cursor: pointer;
       	<foreach name="templates" item="v">
          <ul>
           <li>
-           <img src="{{$v['thumb']}}" />
+           <img src="http://admin.{{:session('domain')}}{{$v['thumb']}}" />
            <a class="btn1" style="float:left;" href="{{:U('Indexs/tpl_choose',array('id'=>$v['id']))}}">应用</a>
            <a class="btn2" target="_blank" href="http://{{$v['url']}}">查看</a>
           </li>
