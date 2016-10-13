@@ -18,9 +18,11 @@ table{
 
 </style>
 <!-- 百度编辑器 -->
- <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/ueditor.all.min.js"> </script>
-<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/lang/zh-cn/zh-cn.js"></script>
+ <link href="/ueditor-utf8-php/themes/default/_css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="/ueditor-utf8-php/third-party/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/ueditor-utf8-php/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/ueditor-utf8-php/_examples/editor_api.js"></script>
+    <script type="text/javascript" src="/ueditor-utf8-php/lang/zh-cn/zh-cn.js"></script>
 <!-- 百度编辑器 -->
 <div style="width:100%;margin:0 auto;">
     <form method="post" action="{{:U('Websites/column_modify')}}">
@@ -70,15 +72,15 @@ table{
     <tr>
         <td style="width:100px;">栏目类型:</td>
         <td style="text-align:left;">
-          <input name="column_type" type="radio" value="products" style="width:20px;" <if condition="($column['column_type'] eq 'products')">checked</if> />产品
-          <input name="column_type" type="radio" value="newss" style="width:20px;" <if condition="($column['column_type'] eq 'newss')">checked</if> />资讯
-          <input id="editors" name="column_type" type="radio" value="cover" style="width:20px;" <if condition="($column['column_type'] eq 'cover')">checked</if>  />封面
+          <input onclick="ineditors2()" name="column_type" type="radio" value="products" style="width:20px;" <if condition="($column['column_type'] eq 'products')">checked</if> />产品
+          <input onclick="ineditors2()" name="column_type" type="radio" value="newss" style="width:20px;" <if condition="($column['column_type'] eq 'newss')">checked</if> />资讯
+          <input id="editors" onclick="ineditors()" name="column_type" type="radio" value="cover" style="width:20px;" <if condition="($column['column_type'] eq 'cover')">checked</if>  />封面
         </td>
     </tr>
     <tr style="display:none;" id="treditors">
         <td style="width:100px;">栏目内容:</td>
         <td style="text-align:left;">
-         <script id="editor" type="text/plain" style="width:100%;height:500px;" name="column_text">{{$column['column_text']}}</script>
+        <script type="text/plain" id="myEditor" style="width:100%;height:500px;" name="column_text">{{$column['column_text']}}</script>
         </td>
     </tr>
     
@@ -91,17 +93,16 @@ table{
 </div>
 </body>
 <script>
-var ue = UE.getEditor('editor');//创建百度编辑器
+var um = UM.getEditor('myEditor');
+function ineditors(){
+ 
+  $('#treditors').css('display','');
+}
 
-$(":radio").click(function(){
-    if($("#editors:radio").attr('checked')){
-      $('#treditors').css('display','');
-    }else{
-
-      $('#treditors').css('display','none');
-    }
-  });
-
+function ineditors2()
+{
+  $('#treditors').css('display','none');
+}
  if($("#editors:radio").attr('checked')){
       $('#treditors').css('display','');
     }else{

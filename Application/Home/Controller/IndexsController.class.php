@@ -18,6 +18,13 @@ class IndexsController extends CommonController
      */
     public function tpl_choose()
     {
+	$user_tpl = M('User_tpl');
+        $tpl = $user_tpl->where("user_id = ".session('homeuser.id'))->field('tpl_id')->find();
+        if($tpl['tpl_id'] != 1){
+            
+        $preg = "/demo_cms_/";
+        if(preg_filter($preg,'',session('homeuser.name'))){echo "<script>alert('你是演示用户禁止修改模板！');window.history.go(-1);</script>";exit;}
+        }
         $tplid['tpl_id'] = I('id');//接受模板id 创建数据
         $userid = session('homeuser.id');//用户id
         $templates = M('Templates');
@@ -26,7 +33,7 @@ class IndexsController extends CommonController
             $user_tpl = M('User_tpl');
             //查询当前用户 已拥有的模板是否是当前模板
             if($user_tpl->where("user_id = {$userid} and tpl_id = {$tplid['tpl_id']}")->find()){
-                echo "<script>alert('次模板您已经安装！');window.history.go(-1);</script>";
+                echo "<script>alert('此模板您已经安装！');window.history.go(-1);</script>";
                 exit;
             }
             //更新模板

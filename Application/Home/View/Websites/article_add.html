@@ -8,9 +8,11 @@
   <div class="container">
   <include file="nav" /><!-- 头部 -->
 <!-- 百度编辑器 -->
- <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/ueditor.all.min.js"> </script>
-<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Home/ueditor-utf8-php/lang/zh-cn/zh-cn.js"></script>
+ <link href="/ueditor-utf8-php/themes/default/_css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="/ueditor-utf8-php/third-party/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/ueditor-utf8-php/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/ueditor-utf8-php/_examples/editor_api.js"></script>
+    <script type="text/javascript" src="/ueditor-utf8-php/lang/zh-cn/zh-cn.js"></script>
 <!-- 百度编辑器 -->
 
 <body topmargin="8">
@@ -160,7 +162,8 @@
     </tr>
     <tr>
       <td>
-        <script id="editor" type="text/plain" style="width:100%;height:500px;" name="article_text">{{$article['article_text']}}</script>
+      <script type="text/plain" id="myEditor" style="width:100%;height:500px;" name="article_text">{{$article['article_text']}}</script>
+       
       </td>
     </tr>
     <tr><td><input type="submit" value="提交"></td></tr>
@@ -170,7 +173,7 @@
 </div>
 </body>
 <script type="text/javascript">
-var ue = UE.getEditor('editor');//创建百度编辑器
+var um = UM.getEditor('myEditor');
     //获取临时图片
     var img = document.getElementById('imgs');
     function check(obj){
